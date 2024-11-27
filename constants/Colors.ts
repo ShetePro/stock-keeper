@@ -18,6 +18,7 @@ export const Colors = {
       tabBackground: COLORS.white,
       tabIconDefault: "#687076",
       tabIconSelected: tintColorLight,
+      cardBackground: COLORS.white
     },
   },
   dark: {
@@ -31,6 +32,7 @@ export const Colors = {
       background: COLORS.black,
       tabBackground: "#353636",
       active: COLORS.white,
+      cardBackground: "#353636"
     },
   },
 };
