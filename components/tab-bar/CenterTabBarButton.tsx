@@ -1,9 +1,6 @@
 import { View, StyleSheet, Pressable, useColorScheme } from "react-native";
-import { COLORS } from "@/styles/theme";
 import Feather from "@expo/vector-icons/Feather";
-import { navigate } from "expo-router/build/global-state/routing";
 import { router } from "expo-router";
-import { Colors } from "@/constants/Colors";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function CenterTabBarButton() {
@@ -38,5 +35,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 10,
+    boxShadow: '0 5 10 rgba(0, 0, 0, .5);'
   },
 });

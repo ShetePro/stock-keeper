@@ -6,7 +6,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import React, {useEffect, useLayoutEffect, useState} from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import TabBarButton from "@/components/tab-bar/TabBarButton";
 import {
   useAnimatedStyle,
@@ -22,11 +22,10 @@ export default function TabBar({
   descriptors,
   navigation,
 }: BottomTabBarProps) {
-  const theme = useColorScheme()
+  const theme = useColorScheme();
   useEffect(() => {
-    console.log(theme, 'theme toggle')
+    console.log(theme, "theme toggle");
   }, [theme]);
-  console.log(theme)
   const [dimensions, setDimension] = useState({ height: 100, width: 300 });
   const colors = useThemeColor();
   const wrapPositionX = useSharedValue(0);
@@ -95,7 +94,11 @@ export default function TabBar({
     });
     // 添加中间间隔
     const center = Math.floor(state.routes?.length / 2);
-    tabs.splice(center, 0, <View style={{ marginHorizontal: 20 }}></View>);
+    tabs.splice(
+      center,
+      0,
+      <View key={"center-empty"} style={{ marginHorizontal: 20 }}></View>,
+    );
     return tabs;
   }
   return (

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   describe: {
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 24,
     color: "gray",
   },

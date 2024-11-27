@@ -69,6 +69,7 @@ export default function TabBarButton({
   });
   return (
     <Pressable
+      key={routeName}
       onPress={onPress}
       onLongPress={onLongPress}
       style={[styles.tabBarItem, style]}

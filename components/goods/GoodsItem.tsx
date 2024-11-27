@@ -7,46 +7,45 @@ import {
   useColorScheme,
 } from "react-native";
 import Tag from "@/components/ui/Tag";
-import { COLORS } from "@/styles/theme";
 import { router } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
+import Card from "@/components/Card";
 export default function GoodsItem(props: GoodsType) {
   const theme = useColorScheme();
   function goDetail() {
     router.push(`/(views)/goods/${props.id}`);
   }
   return (
-    <Pressable
+    <Card
       style={{
         ...styles.goodsBox,
-        borderColor: theme === "light" ? COLORS.white : "#353636",
-        backgroundColor: theme === "light" ? COLORS.white : "#353636",
       }}
-      onPress={goDetail}
     >
-      <Image style={styles.cover} source={{ uri: props.cover }} />
-      <View style={styles.content}>
-        <ThemedText style={{ fontWeight: "bold" }} className={"text-md mb-1"}>
-          {props.goodsName}
-        </ThemedText>
-        <Tag label={props.category as string} type={"primary"}></Tag>
-        <View className={"flex flex-row items-center justify-between"}>
-          <ThemedText className={"text-gray-400 text-mini"}>
-            剩余{props.quantity}件
+      <Pressable onPress={goDetail}>
+        <Image style={styles.cover} source={{ uri: props.cover }} />
+        <View style={styles.content}>
+          <ThemedText style={{ fontWeight: "bold" }} className={"text-md mb-1"}>
+            {props.goodsName}
           </ThemedText>
-          <Text className={"text-red-500 text-xl"}>¥{props.price}</Text>
+          <Tag label={props.category as string} type={"primary"}></Tag>
+          <View className={"flex flex-row items-center justify-between"}>
+            <ThemedText type={"describe"} className={"text-gray-400 text-mini"}>
+              剩余{props.quantity}件
+            </ThemedText>
+            <Text className={"text-red-500 text-xl"}>¥{props.price}</Text>
+          </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+    </Card>
   );
 }
 const styles = StyleSheet.create({
   goodsBox: {
-    width: "40%",
+    width: "100%",
     margin: 10,
+    padding: 0,
     overflow: "hidden",
     flex: 1,
-    backgroundColor: COLORS.white,
     borderRadius: 8,
   },
   cover: {
