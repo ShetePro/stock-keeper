@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Platform } from 'react-native';
+import {StyleSheet, Image, Platform, TouchableOpacity, Text} from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -6,8 +6,11 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import {COLORS} from "@/styles/theme";
+import {useSession} from "@/components/SessionProvider";
 
 export default function TabTwoScreen() {
+  const {signOut} = useSession()
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -91,6 +94,9 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
+      <TouchableOpacity style={styles.loginOut} onPress={() => signOut()} activeOpacity={.9}>
+        <Text style={{color: COLORS.dangerColor, fontWeight: 'bold'}}>Login Out</Text>
+      </TouchableOpacity>
     </ParallaxScrollView>
   );
 }
@@ -106,4 +112,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  loginOut: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    marginHorizontal: 20,
+  }
 });
