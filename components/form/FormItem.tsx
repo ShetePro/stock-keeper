@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, TextInput, View, ViewStyle } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { Control, Controller, FieldValues, FormState } from "react-hook-form";
 import { FormColumnType } from "@/types/formTypes";
@@ -24,7 +19,11 @@ export default function FormItem({
 }: FormItemProps) {
   return (
     <View style={[styles.field, inline && styles.inline]} key={prop}>
-      <ThemedText style={{ width: labelWidth, textAlign: 'right' }}>{label}: </ThemedText>
+      {label && (
+        <ThemedText style={{ width: labelWidth, textAlign: "right" }}>
+          {label}:{" "}
+        </ThemedText>
+      )}
       <Controller
         name={prop}
         control={control}
@@ -37,7 +36,7 @@ export default function FormItem({
                 style={[
                   styles.input,
                   {
-                    color: '#545151',
+                    color: "#545151",
                   },
                 ]}
                 value={field.value || ""}
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   control: {
-    flex: 1
+    flex: 1,
   },
   input: {
     borderWidth: 1,
