@@ -16,6 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Appearance } from "react-native";
 import { SessionProvider } from "@/components/SessionProvider";
 import Toast from "react-native-toast-message";
+import '@/utils/i18n'
 
 
 
@@ -37,6 +38,9 @@ export default function RootLayout() {
   });
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
+    PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
+    PoppinsSemiBold: require("../assets/fonts/Poppins-SemiBold.ttf"),
   });
 
   useEffect(() => {
