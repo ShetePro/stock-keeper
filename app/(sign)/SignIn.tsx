@@ -23,7 +23,18 @@ function SignIn({ t }: WithTranslation) {
   const { signIn } = useSession();
   const router = useRouter();
 
-  const { control, handleSubmit, watch, formState: {errors, isValid} } = useForm();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      userName: "",
+      password: "",
+    },
+  });
   function goRegister() {
     router.replace("/SignUp");
   }
@@ -67,12 +78,16 @@ function SignIn({ t }: WithTranslation) {
         <View>
           <LabelMove
             label={t("account")}
+            error={!!errors["userName"]}
             height={64}
             render={(move) => (
               <FormItem
                 control={control}
-                label={""}
+                rules={{
+                  required: true,
+                }}
                 prop={"userName"}
+                errors={errors}
                 component={({ field: { value, onChange } }) => (
                   <TextInput
                     onFocus={() => move(true)}
@@ -91,7 +106,9 @@ function SignIn({ t }: WithTranslation) {
             render={(move) => (
               <FormItem
                 control={control}
-                label={""}
+                rules={{
+                  required: true,
+                }}
                 prop={"password"}
                 component={({ field: { value, onChange } }) => (
                   <TextInput

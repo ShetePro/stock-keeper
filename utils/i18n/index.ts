@@ -4,24 +4,39 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     login: {
-      title: 'Login here',
+      title: "Login here",
+      registerTitle: "Create Account",
+      registerDescription:
+        "Create an account so you can explore all the existing jobs",
       welcome: "Welcome back you’ve been missed!",
       forgetPassword: "Forgot your password?",
       account: "Account",
       password: "Password",
-      createAccount: 'Create new account',
-      continue: 'Or continue with',
+      confirmPassword: "Confirm Password",
+      createAccount: "Create new account",
+      haveAccount: "Already have an account",
+      continue: "Or continue with",
+      login: "Sign in",
+      register: "Sign up",
+      confirmPasswordError: "The two passwords do not match",
     },
   },
   cn: {
     login: {
-      title: '在这里登陆',
+      title: "在这里登陆",
+      registerTitle: "创建账户",
+      registerDescription: "创建一个帐户，以便您可以探索所有现有的功能",
       welcome: "欢迎回来，我们都很想念你！",
       account: "账号",
       password: "密码",
+      confirmPassword: "确认密码",
       forgetPassword: "忘记密码?",
-      createAccount: '创建新账号',
-      continue: '其他方式登陆'
+      createAccount: "创建新账号",
+      haveAccount: "已有账户",
+      continue: "其他方式登陆",
+      login: "登陆",
+      register: "注册",
+      confirmPasswordError: "两次密码不一致",
     },
   },
 };
