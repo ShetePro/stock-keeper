@@ -6,7 +6,6 @@ import {
   Text,
   Pressable,
 } from "react-native";
-import PageView from "@/components/PageView";
 import { ThemedText } from "@/components/ThemedText";
 import { useSession } from "@/components/SessionProvider";
 import { COLORS } from "@/styles/theme";
@@ -17,13 +16,17 @@ import { useRouter } from "expo-router";
 import { AesEncryption } from "@/utils/encryption";
 import { WithTranslation, withTranslation } from "react-i18next";
 import LabelMove from "@/components/sign/LabelMove";
-import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import SignView from "@/components/sign/SignView";
+import ContinueGroup from "@/components/sign/ContinueGroup";
 
 function SignIn({ t }: WithTranslation) {
   const { signIn } = useSession();
   const router = useRouter();
 
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, watch, formState: {errors, isValid} } = useForm();
+  function goRegister() {
+    router.replace("/SignUp");
+  }
   async function onSubmit(data: any) {
     try {
       let rsaKey: string = "";
@@ -49,7 +52,7 @@ function SignIn({ t }: WithTranslation) {
     }
   }
   return (
-    <PageView
+    <SignView
       style={{
         backgroundColor: "white",
         position: "relative",
@@ -73,7 +76,7 @@ function SignIn({ t }: WithTranslation) {
                 component={({ field: { value, onChange } }) => (
                   <TextInput
                     onFocus={() => move(true)}
-                    onBlur={() => move(false)}
+                    onBlur={() => !value && move(false)}
                     className={"w-full h-full"}
                     value={value}
                     onChangeText={onChange}
@@ -93,7 +96,7 @@ function SignIn({ t }: WithTranslation) {
                 component={({ field: { value, onChange } }) => (
                   <TextInput
                     onFocus={() => move(true)}
-                    onBlur={() => move(false)}
+                    onBlur={() => !value && move(false)}
                     className={"w-full h-full"}
                     textContentType={"password"}
                     value={value || ""}
@@ -110,47 +113,34 @@ function SignIn({ t }: WithTranslation) {
             {t("forgetPassword")}
           </Text>
         </View>
-        <TouchableOpacity onPress={handleSubmit(onSubmit)} activeOpacity={0.8}>
-          <View style={styles.loginBtn}>
+        <TouchableOpacity
+          onPress={handleSubmit(onSubmit)}
+          activeOpacity={0.8}
+          disabled={!isValid}
+        >
+          <View
+            style={[
+              styles.loginBtn,
+              {
+                backgroundColor: !isValid
+                  ? COLORS.disabledPrimaryColor
+                  : COLORS.primaryColor,
+              },
+            ]}
+          >
             <ThemedText className={"font-bold"} style={{ color: COLORS.white }}>
-              登陆
+              {t("login")}
             </ThemedText>
           </View>
         </TouchableOpacity>
-        <Pressable>
-          <Text className={"mt-10 text-center"}>{t("createAccount")}</Text>
-        </Pressable>
-        <View className={"flex flex-col items-center justify-center flex-grow"}>
-          <Text
-            className={"font-bold mb-10 mt-10"}
-            style={{ color: COLORS.primaryColor }}
-          >
-            {t("continue")}
+        <Pressable onPress={goRegister} className={"mt-10"}>
+          <Text className={"text-center font-bold p-2 "}>
+            {t("createAccount")}
           </Text>
-          <View className={"flex flex-row items-center gap-2"}>
-            <Pressable style={styles.continueBox}>
-              <FontAwesome5 name="mobile-alt" size={24} color="black" />
-            </Pressable>
-            <Pressable style={styles.continueBox}>
-              <AntDesign name="wechat" size={24} color="black" />
-            </Pressable>
-            <Pressable style={styles.continueBox}>
-              <AntDesign name="alipay-circle" size={24} color="black" />
-            </Pressable>
-          </View>
-        </View>
+        </Pressable>
+        <ContinueGroup />
       </View>
-      <View
-        className={
-          "w-[600px] h-[600px] rounded-full bg-[#F8F9FF] absolute right-[-300px] top-[-350px] z-0"
-        }
-      ></View>
-      <View
-        className={
-          "w-[500px] h-[500px] rounded-full border-2 border-[#F8F9FF] absolute right-[-120px] top-[-220px] z-0"
-        }
-      ></View>
-    </PageView>
+    </SignView>
   );
 }
 
@@ -184,14 +174,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F4FF",
     position: "relative",
     marginVertical: 20,
-  },
-  continueBox: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    height: 40,
-    backgroundColor: "#ECECEC",
-    borderRadius: 10,
   },
 });
 export default withTranslation("login")(SignIn);

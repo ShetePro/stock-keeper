@@ -16,9 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Appearance } from "react-native";
 import { SessionProvider } from "@/components/SessionProvider";
 import Toast from "react-native-toast-message";
-import '@/utils/i18n'
-
-
+import "@/utils/i18n";
 
 // const AppStack = () => (
 //   <>
@@ -56,7 +54,9 @@ export default function RootLayout() {
     <SafeAreaProvider style={{ backgroundColor: theme.colors.background }}>
       <ThemeProvider value={theme}>
         <SessionProvider>
-          <Slot />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Slot />
+          </Stack>
         </SessionProvider>
         <StatusBar style="auto" />
         <Toast />
