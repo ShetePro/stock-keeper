@@ -1,22 +1,42 @@
-import { StyleSheet, TextInput, View, ViewStyle } from "react-native";
+import { StyleSheet, TextInput, View, ViewStyle, Text } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import { Control, Controller, FieldValues, FormState } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  FormState,
+  RegisterOptions,
+} from "react-hook-form";
 import { FormColumnType } from "@/types/formTypes";
-type FormItemProps = {
-  control: Control;
+import { FieldErrors } from "react-hook-form/dist/types/errors";
+import { COLORS } from "@/styles/theme";
+type FormItemProps = Partial<FormColumnType> & {
+  control: Control<any> | undefined;
+  prop: string;
   style?: ViewStyle;
   formState?: FormState<FieldValues>;
   labelWidth?: number;
   inline?: boolean;
-} & FormColumnType;
+  rules?:
+    | Omit<
+        RegisterOptions<FieldValues, string>,
+        "disabled" | "setValueAs" | "valueAsNumber" | "valueAsDate"
+      >
+    | undefined;
+  label?: string;
+  errors?: FieldErrors;
+};
 export default function FormItem({
-  label,
+  label = "",
   prop,
   inline = true,
   control,
   labelWidth = 50,
   component,
+  rules,
+  errors,
 }: FormItemProps) {
+  const error = errors ? errors[prop]?.message : "";
   return (
     <View style={[styles.field, inline && styles.inline]} key={prop}>
       {label && (
@@ -26,6 +46,7 @@ export default function FormItem({
       )}
       <Controller
         name={prop}
+        rules={rules}
         control={control}
         render={({ field, formState, fieldState }) => (
           <View style={styles.control}>
@@ -46,6 +67,7 @@ export default function FormItem({
           </View>
         )}
       />
+      {error && <Text style={styles.error}>{error as string}</Text>}
     </View>
   );
 }
@@ -54,6 +76,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
+    height: "100%",
+    flex: 1,
     margin: 10,
   },
   inline: {
@@ -62,6 +86,7 @@ const styles = StyleSheet.create({
   },
   control: {
     flex: 1,
+    height: "100%",
   },
   input: {
     borderWidth: 1,
@@ -70,5 +95,11 @@ const styles = StyleSheet.create({
     padding: 5,
     height: 40,
     marginHorizontal: 20,
+  },
+  error: {
+    position: "absolute",
+    bottom: "-80%",
+    left: 0,
+    color: COLORS.dangerColor,
   },
 });
