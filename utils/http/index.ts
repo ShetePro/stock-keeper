@@ -10,6 +10,7 @@ import { isString } from "@/utils/is";
 import { createNow } from "./helper";
 import { deepMerge, setObjToUrlParams } from "@/utils/util";
 import Toast from "react-native-toast-message";
+import { getStorageItem } from "@/hooks/useStorageState";
 const prefix = "http://localhost:8796";
 const errorResult = "__ERROR_RESULT__";
 /**
@@ -75,8 +76,9 @@ const transform: AxiosTransform = {
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, joinTime = true } = options;
     joinPrefix && (config.url = `${prefix}${config.url}`);
+    const session = getStorageItem("token");
     // 请求之前处理config
-    const token = `bearer`;
+    const token = `bearer ${session}`;
     if (config.headers) {
       config.headers.Authorization = config.headers.Authorization || token;
     } else {
@@ -129,9 +131,12 @@ const transform: AxiosTransform = {
    * @description: 响应错误处理
    */
   responseInterceptorsCatch: (error: any) => {
-    console.log(error);
     const { response } = error || {};
     const msg: string = response?.data?.msg ?? "";
+    Toast.show({
+      type: "error",
+      text1: msg,
+    });
     // 提示错误信息
     // 处理指定错误码
     checkStatus(error?.response?.status, msg);

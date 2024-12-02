@@ -17,3 +17,9 @@ export function getRsaKey() {
     url: "/rsaKey",
   });
 }
+
+export function getUserInfo() {
+  return request.get({
+    url: "/api/user",
+  });
+}

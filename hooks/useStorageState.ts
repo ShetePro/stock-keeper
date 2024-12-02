@@ -35,7 +35,36 @@ export async function setStorageItemAsync(key: string, value: string | null) {
     }
   }
 }
-
+export function getStorageItem(key: string) {
+  if (Platform.OS === "web") {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      console.error("Local storage is unavailable:", e);
+    }
+  } else {
+    return SecureStore.getItem(key);
+  }
+}
+export function getStorageItemAsync(key: string) {
+  return new Promise((resolve, reject) => {
+    if (Platform.OS === "web") {
+      try {
+        resolve(localStorage.getItem(key));
+      } catch (e) {
+        console.error("Local storage is unavailable:", e);
+      }
+    } else {
+      SecureStore.getItemAsync(key)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    }
+  });
+}
 export function useStorageState(key: string): UseStateHook<string> {
   // Public
   const [state, setState] = useAsyncState<string>();
@@ -60,7 +89,6 @@ export function useStorageState(key: string): UseStateHook<string> {
   // Set
   const setValue = useCallback(
     (value: string | null) => {
-      console.log('set session', value)
       setState(value);
       setStorageItemAsync(key, value);
     },

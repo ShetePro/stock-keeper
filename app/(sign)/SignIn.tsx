@@ -11,7 +11,7 @@ import { useSession } from "@/components/SessionProvider";
 import { COLORS } from "@/styles/theme";
 import FormItem from "@/components/form/FormItem";
 import { useForm } from "react-hook-form";
-import { getRsaKey, userLogin } from "@/api/login";
+import { getRsaKey, getUserInfo, userLogin } from "@/api/login";
 import { useRouter } from "expo-router";
 import { AesEncryption } from "@/utils/encryption";
 import { WithTranslation, withTranslation } from "react-i18next";
@@ -19,6 +19,7 @@ import LabelMove from "@/components/sign/LabelMove";
 import SignView from "@/components/sign/SignView";
 import ContinueGroup from "@/components/sign/ContinueGroup";
 import Toast from "react-native-toast-message";
+import { setStorageItemAsync } from "@/hooks/useStorageState";
 
 function SignIn({ t }: WithTranslation) {
   const { signIn } = useSession();
@@ -56,12 +57,15 @@ function SignIn({ t }: WithTranslation) {
         iv: encryption.getIv,
         password,
       }).then(({ data }) => {
-        Toast.show({
-          type: "success",
-          text1: "欢迎回来!",
+        signIn(data.data);
+        getUserInfo().then(({ data }) => {
+          setStorageItemAsync("user", data.data);
+          Toast.show({
+            type: "success",
+            text1: `${data.data.userName}, 欢迎回来!`,
+          });
+          router.replace("/(tabs)");
         });
-        signIn(data.data._id);
-        router.replace("/(tabs)");
       });
     } catch (e) {
       console.log(e);
