@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import "../styles/global.css";
 
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {SafeAreaProvider, useSafeAreaInsets} from "react-native-safe-area-context";
 import { Appearance } from "react-native";
 import { SessionProvider } from "@/components/SessionProvider";
 import Toast from "react-native-toast-message";
@@ -40,7 +40,7 @@ export default function RootLayout() {
     PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
     PoppinsSemiBold: require("../assets/fonts/Poppins-SemiBold.ttf"),
   });
-
+  const insets = useSafeAreaInsets()
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -59,7 +59,7 @@ export default function RootLayout() {
           </Stack>
         </SessionProvider>
         <StatusBar style="auto" />
-        <Toast />
+        <Toast topOffset={insets.top + 10} visibilityTime={2000} />
       </ThemeProvider>
     </SafeAreaProvider>
   );

@@ -1,10 +1,10 @@
-import { View, StyleSheet, ViewStyle } from "react-native";
+import {View, StyleSheet, ViewStyle, StyleProp} from "react-native";
 import React from "react";
 import { useThemeColor } from "@/hooks/useThemeColor";
 type CardProps = {
   children: React.ReactNode | React.ReactNode[];
   title?: string;
-  style?: ViewStyle;
+  style?:  StyleProp<ViewStyle>;
 };
 export default function Card({ children, style }: CardProps) {
   const colors = useThemeColor();
