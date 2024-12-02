@@ -18,6 +18,7 @@ import { WithTranslation, withTranslation } from "react-i18next";
 import LabelMove from "@/components/sign/LabelMove";
 import SignView from "@/components/sign/SignView";
 import ContinueGroup from "@/components/sign/ContinueGroup";
+import Toast from "react-native-toast-message";
 
 function SignIn({ t }: WithTranslation) {
   const { signIn } = useSession();
@@ -55,6 +56,10 @@ function SignIn({ t }: WithTranslation) {
         iv: encryption.getIv,
         password,
       }).then(({ data }) => {
+        Toast.show({
+          type: "success",
+          text1: "欢迎回来!",
+        });
         signIn(data.data._id);
         router.replace("/(tabs)");
       });

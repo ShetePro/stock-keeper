@@ -14,9 +14,10 @@ import ContinueGroup from "@/components/sign/ContinueGroup";
 import { withTranslation, WithTranslation } from "react-i18next";
 import FormItem from "@/components/form/FormItem";
 import { useRouter } from "expo-router";
-import { SubmitErrorHandler, useForm } from "react-hook-form";
-import { getRsaKey, userLogin } from "@/api/login";
+import { useForm } from "react-hook-form";
+import { getRsaKey, userRegister } from "@/api/login";
 import { AesEncryption } from "@/utils/encryption";
+import Toast from "react-native-toast-message";
 
 function SignUp({ t }: WithTranslation) {
   const router = useRouter();
@@ -48,13 +49,20 @@ function SignUp({ t }: WithTranslation) {
         serverPublicKey: rsaKey,
       });
       const password = encryption.encryptByAES(data.password);
-      userLogin({
+      userRegister({
         ...data,
         key: encryption.getKey,
-        iv: encryption.getIv,
         password,
       }).then(({ data }) => {
-        router.replace("/(tabs)");
+        Toast.show({
+          type: "success",
+          text1: "注册成功! 请登录",
+          visibilityTime: 2000,
+        });
+        setTimeout(() => {
+          goLogin();
+        }, 1000);
+        // router.replace("/(tabs)");
       });
     } catch (e) {
       console.log(e);
@@ -77,7 +85,7 @@ function SignUp({ t }: WithTranslation) {
           <LabelMove
             label={t("account")}
             height={64}
-            error={!!errors['userName']}
+            error={!!errors["userName"]}
             render={(move) => (
               <FormItem
                 control={control}
@@ -99,10 +107,9 @@ function SignUp({ t }: WithTranslation) {
               />
             )}
           ></LabelMove>
-          <Text>{errors.userName && <p>{errors.userName.message}</p>}</Text>
           <LabelMove
             label={t("password")}
-            error={!!errors['password']}
+            error={!!errors["password"]}
             height={64}
             render={(move) => (
               <FormItem
@@ -127,7 +134,7 @@ function SignUp({ t }: WithTranslation) {
           ></LabelMove>
           <LabelMove
             label={t("confirmPassword")}
-            error={!!errors['confirmPassword']}
+            error={!!errors["confirmPassword"]}
             height={64}
             render={(move) => (
               <FormItem

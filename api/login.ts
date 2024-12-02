@@ -1,5 +1,11 @@
 import { request } from "@/utils/http";
 
+export function userRegister(data: any) {
+  return request.post({
+    url: "/register",
+    data,
+  });
+}
 export function userLogin(data: any) {
   return request.post({
     url: "/token",
