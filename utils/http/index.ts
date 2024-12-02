@@ -9,6 +9,7 @@ import { ContentTypeEnum, RequestEnum, ResultEnum } from "./httpEnum";
 import { isString } from "@/utils/is";
 import { createNow } from "./helper";
 import { deepMerge, setObjToUrlParams } from "@/utils/util";
+import Toast from "react-native-toast-message";
 const prefix = "http://localhost:8796";
 const errorResult = "__ERROR_RESULT__";
 /**
@@ -50,23 +51,18 @@ const transform: AxiosTransform = {
     }
     // 接口请求成功，直接返回结果
     if (code === ResultEnum.SUCCESS) {
-      return {
-        code,
-        data,
-        message: msg,
-      };
-      // if (dataCode === "200") {
-      //   return {
-      //     code,
-      //     data,
-      //     message: msg,
-      //   };
-      // } else {
-      //   return Toast.show({
-      //     type: 'error',
-      //     text1: data.msg,
-      //   });
-      // }
+      if (Number(dataCode) === 200) {
+        return {
+          code,
+          data,
+          message: msg,
+        };
+      } else {
+        return Toast.show({
+          type: "error",
+          text1: data.msg,
+        });
+      }
     }
     // 接口请求错误，统一提示错误信息
     if (code === ResultEnum.ERROR || code === ResultEnum.TIMEOUT) {
