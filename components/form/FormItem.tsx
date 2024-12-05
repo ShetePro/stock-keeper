@@ -40,7 +40,7 @@ export default function FormItem({
   return (
     <View style={[styles.field, inline && styles.inline]} key={prop}>
       {label && (
-        <ThemedText style={{ width: labelWidth, height: 30, textAlign: "right" }}>
+        <ThemedText numberOfLines={1} ellipsizeMode={'tail'} style={{ width: labelWidth, height: 30, textAlign: "left" }}>
           {label}:{" "}
         </ThemedText>
       )}
