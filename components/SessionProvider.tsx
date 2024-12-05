@@ -1,13 +1,13 @@
 import { useContext, createContext, type PropsWithChildren } from "react";
-import { useStorageState } from "@/hooks/useStorageState";
+import { setStorageItemAsync, useStorageState } from "@/hooks/useStorageState";
 
 const AuthContext = createContext<{
-  signIn: (token: string) => void;
+  signIn: (tokens: { token: string; refreshToken: string }) => void;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
 }>({
-  signIn: (token: string) => null,
+  signIn: (tokens: { token: string; refreshToken: string }) => null,
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -31,12 +31,14 @@ export function SessionProvider({ children }: PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: (token: string) => {
+        signIn: (tokens: { token: string; refreshToken: string }) => {
           // Perform sign-in logic here
-          setSession(token);
+          setSession(tokens.token);
+          setStorageItemAsync("refreshToken", tokens.refreshToken);
         },
         signOut: () => {
           setSession(null);
+          setStorageItemAsync("refreshToken", null);
         },
         session,
         isLoading,
