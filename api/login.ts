@@ -12,6 +12,12 @@ export function userLogin(data: any) {
     data,
   });
 }
+export function refreshTokenApi(data: any) {
+  return request.post({
+    url: "/refreshToken",
+    data,
+  });
+}
 export function getRsaKey() {
   return request.get({
     url: "/rsaKey",

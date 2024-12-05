@@ -15,7 +15,28 @@ function useAsyncState<T>(
     initialValue,
   ) as UseStateHook<T>;
 }
-
+export function deleteStorageItem(key: string) {
+  SecureStore.deleteItemAsync(key).then(() => {});
+}
+export function setStorageItem(key: string, value: string | null) {
+  if (Platform.OS === "web") {
+    try {
+      if (value === null) {
+        localStorage.removeItem(key);
+      } else {
+        localStorage.setItem(key, value);
+      }
+    } catch (e) {
+      console.error("Local storage is unavailable:", e);
+    }
+  } else {
+    if (value) {
+      SecureStore.setItem(key, value);
+    } else {
+      deleteStorageItem(key);
+    }
+  }
+}
 export async function setStorageItemAsync(key: string, value: string | null) {
   if (Platform.OS === "web") {
     try {
@@ -90,7 +111,7 @@ export function useStorageState(key: string): UseStateHook<string> {
   const setValue = useCallback(
     (value: string | null) => {
       setState(value);
-      setStorageItemAsync(key, value);
+      setStorageItem(key, value);
     },
     [key],
   );

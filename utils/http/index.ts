@@ -10,7 +10,9 @@ import { isString } from "@/utils/is";
 import { createNow } from "./helper";
 import { deepMerge, setObjToUrlParams } from "@/utils/util";
 import Toast from "react-native-toast-message";
-import { getStorageItem } from "@/hooks/useStorageState";
+import { getStorageItem, setStorageItem } from "@/hooks/useStorageState";
+import { refreshTokenApi } from "@/api/login";
+const preConfig = {};
 const prefix = "http://localhost:8796";
 const errorResult = "__ERROR_RESULT__";
 /**
@@ -130,12 +132,24 @@ const transform: AxiosTransform = {
   /**
    * @description: 响应错误处理
    */
-  responseInterceptorsCatch: (error: any) => {
-    const { response } = error || {};
-    const msg: string = response?.data?.msg ?? "";
+  responseInterceptorsCatch: async (error: any) => {
+    const { response, config } = error || {};
+    if (error.response && error.response.status === 401 && !config._retry) {
+      config._retry = true;
+      const session = getStorageItem("refreshToken");
+      const res = await refreshTokenApi({
+        refreshToken: session,
+      });
+      setStorageItem("token", res.data.data);
+      config.headers.Authorization = `bearer ${res.data.data}`;
+      return request.request(config);
+    }
+    const msg: string =
+      response?.data?.msg || response?.data?.message || "网络错误";
     Toast.show({
       type: "error",
       text1: msg,
+      text2: error.message,
     });
     // 提示错误信息
     // 处理指定错误码
@@ -182,5 +196,4 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
     ),
   );
 }
-
 export const request = createAxios();

@@ -16,13 +16,11 @@ export class AesEncryption {
   constructor(opt: Partial<EncryptionParams> = {}) {
     const { serverPublicKey } = opt;
     const aesKey = forge.random.getBytesSync(32);
-    console.log("生成AES Key: ", forge.util.encode64(aesKey));
     if (serverPublicKey) {
       const publicKey = forge.pki.publicKeyFromPem(serverPublicKey);
       this.rsaEncrypt = publicKey.encrypt(aesKey, "RSA-OAEP", {
         md: forge.md.sha256.create(),
       });
-      console.log("RSA 加密后的 AES Key: ",forge.util.encode64(this.rsaEncrypt));
       this.key = CryptoJS.enc.Base64.parse(forge.util.encode64(aesKey));
       this.iv = CryptoJS.enc.Utf8.parse("1234567890abcdef");
     } else {
