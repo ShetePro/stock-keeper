@@ -11,6 +11,7 @@ export const Colors = {
   light: {
     colors: {
       text: "#11181C",
+      textWeaken: "#525256",
       background: COLORS.white,
       active: COLORS.primaryColor,
       tint: tintColorLight,
@@ -24,6 +25,7 @@ export const Colors = {
   dark: {
     colors: {
       text: "#ECEDEE",
+      textWeaken: "#525256",
       // background: "#151718",
       tint: tintColorDark,
       icon: "#9BA1A6",
