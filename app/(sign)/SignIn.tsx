@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { useSession } from "@/components/SessionProvider";
@@ -20,15 +21,18 @@ import SignView from "@/components/sign/SignView";
 import ContinueGroup from "@/components/sign/ContinueGroup";
 import Toast from "react-native-toast-message";
 import { setStorageItemAsync } from "@/hooks/useStorageState";
+import LoadingPressed from "@/components/ui/Loading";
+import { useState } from "react";
+import Loading from "@/components/ui/Loading";
 
 function SignIn({ t }: WithTranslation) {
   const { signIn } = useSession();
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
@@ -51,24 +55,28 @@ function SignIn({ t }: WithTranslation) {
         serverPublicKey: rsaKey,
       });
       const password = encryption.encryptByAES(data.password);
+      setLoading(true);
       userLogin({
         ...data,
         key: encryption.getKey,
         iv: encryption.getIv,
         password,
-      }).then(({ data }) => {
-        signIn(data.data);
-        getUserInfo().then(({ data }) => {
-          setStorageItemAsync("user", data.data);
-          Toast.show({
-            type: "success",
-            text1: `${data.data.userName}, 欢迎回来!`,
+      })
+        .then(({ data }) => {
+          signIn(data.data);
+          getUserInfo().then(({ data }) => {
+            setStorageItemAsync("user", data.data);
+            Toast.show({
+              type: "success",
+              text1: `${data.data.userName}, 欢迎回来!`,
+            });
+            router.replace("/(tabs)");
           });
-          router.replace("/(tabs)");
-        });
-      });
+        })
+        .finally(() => setLoading(false));
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   }
   return (
@@ -142,7 +150,7 @@ function SignIn({ t }: WithTranslation) {
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
           activeOpacity={0.8}
-          disabled={!isValid}
+          disabled={!isValid || loading}
         >
           <View
             style={[
@@ -154,9 +162,16 @@ function SignIn({ t }: WithTranslation) {
               },
             ]}
           >
-            <ThemedText className={"font-bold"} style={{ color: COLORS.white }}>
-              {t("login")}
-            </ThemedText>
+            {loading ? (
+              <Loading />
+            ) : (
+              <ThemedText
+                className={"font-bold"}
+                style={{ color: COLORS.white }}
+              >
+                {t("login")}
+              </ThemedText>
+            )}
           </View>
         </TouchableOpacity>
         <Pressable onPress={goRegister} className={"mt-10"}>

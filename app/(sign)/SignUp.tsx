@@ -18,14 +18,16 @@ import { useForm } from "react-hook-form";
 import { getRsaKey, userRegister } from "@/api/login";
 import { AesEncryption } from "@/utils/encryption";
 import Toast from "react-native-toast-message";
+import { useState } from "react";
+import Loading from "@/components/ui/Loading";
 
 function SignUp({ t }: WithTranslation) {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     control,
     handleSubmit,
-    watch,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
@@ -45,6 +47,7 @@ function SignUp({ t }: WithTranslation) {
         const { data } = await getRsaKey();
         rsaKey = data.data;
       }
+      setLoading(true);
       const encryption = new AesEncryption({
         serverPublicKey: rsaKey,
       });
@@ -53,19 +56,21 @@ function SignUp({ t }: WithTranslation) {
         ...data,
         key: encryption.getKey,
         password,
-      }).then(({ data }) => {
-        Toast.show({
-          type: "success",
-          text1: "注册成功! 请登录",
-          visibilityTime: 2000,
-        });
-        setTimeout(() => {
-          goLogin();
-        }, 1000);
-        // router.replace("/(tabs)");
-      });
+      })
+        .then(({ data }) => {
+          Toast.show({
+            type: "success",
+            text1: "注册成功! 请登录",
+            visibilityTime: 2000,
+          });
+          setTimeout(() => {
+            goLogin();
+          }, 1000);
+        })
+        .catch(() => setLoading(false));
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   }
   return (
@@ -167,7 +172,7 @@ function SignUp({ t }: WithTranslation) {
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
           activeOpacity={0.8}
-          disabled={!isValid}
+          disabled={!isValid || loading}
           style={[
             styles.loginBtn,
             {
@@ -177,9 +182,13 @@ function SignUp({ t }: WithTranslation) {
             },
           ]}
         >
-          <ThemedText className={"font-bold"} style={{ color: COLORS.white }}>
-            {t("register")}
-          </ThemedText>
+          {loading ? (
+            <Loading />
+          ) : (
+            <ThemedText className={"font-bold"} style={{ color: COLORS.white }}>
+              {t("register")}
+            </ThemedText>
+          )}
         </TouchableOpacity>
         <Pressable onPress={goLogin} className={"mt-10"}>
           <Text className={"text-center font-bold  p-2"}>
