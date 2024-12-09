@@ -14,6 +14,7 @@ import { getStorageItem, setStorageItem } from "@/hooks/useStorageState";
 import { refreshTokenApi } from "@/api/login";
 const preConfig = {};
 const prefix = "http://localhost:8796";
+// const prefix = "http://shetepro.com:8796";
 const errorResult = "__ERROR_RESULT__";
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -149,7 +150,7 @@ const transform: AxiosTransform = {
     Toast.show({
       type: "error",
       text1: msg,
-      text2: error.message,
+      text2: config.url,
     });
     // 提示错误信息
     // 处理指定错误码
