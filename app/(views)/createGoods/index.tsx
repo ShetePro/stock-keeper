@@ -41,32 +41,33 @@ export default function createGoods() {
       <ScrollView style={{ flex: 1 }}>
         <Card style={styles.formCard}>
           <FormItem
+            style={styles.formItem}
             control={control}
+            labelWidth={80}
             label={"名称"}
             prop={"goodsName"}
-            inline={false}
           />
           <FormItem
+            style={styles.formItem}
             control={control}
+            labelWidth={80}
             label={"类别"}
             prop={"category"}
-            inline={false}
           />
           <FormItem
+            style={styles.formItem}
             control={control}
+            labelWidth={80}
             label={"品牌"}
             prop={"brandName"}
-            inline={false}
           />
           <FormItem
+            style={styles.formItem}
             labelWidth={80}
             control={control}
             label={"商品条码"}
             prop={"barcode"}
-            inline={false}
           />
-        </Card>
-        <Card style={[styles.formCard]}>
           <FormItem
             control={control}
             label={"价格"}
@@ -88,20 +89,20 @@ export default function createGoods() {
               <NumberInput value={value} onChange={onChange} unit={"件"} />
             )}
           />
+          <FormItem
+            labelWidth={100}
+            control={control}
+            label={"缩略图"}
+            prop={"cover"}
+            component={({ field: { value, onChange } }) => (
+              <GoodsPicture
+                style={{ marginLeft: 80 }}
+                url={value}
+                onChange={onChange}
+              />
+            )}
+          />
         </Card>
-        <FormItem
-          labelWidth={100}
-          control={control}
-          label={"缩略图"}
-          prop={"cover"}
-          component={({ field: { value, onChange } }) => (
-            <GoodsPicture
-              style={{ marginLeft: 80 }}
-              url={value}
-              onChange={onChange}
-            />
-          )}
-        />
       </ScrollView>
 
       <TouchableOpacity
@@ -130,6 +131,11 @@ const styles = StyleSheet.create({
   },
   formCard: {
     margin: 10,
+  },
+  formItem: {
+    borderColor: "#e3e2e2",
+    borderBottomWidth: 1,
+    paddingBottom: 8,
   },
   submitBtn: {
     marginHorizontal: 20,

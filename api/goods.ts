@@ -31,3 +31,11 @@ export function getGoodsRecordApi(data = {}) {
     data,
   });
 }
+
+// 获取商品月度统计
+export function getGoodsMonthDataApi(data = {}) {
+  return request.post({
+    url: "/api/goods/month-statistics",
+    data,
+  });
+}

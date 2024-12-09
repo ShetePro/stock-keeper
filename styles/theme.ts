@@ -1,7 +1,7 @@
 export const COLORS = {
   primaryColor: "#1F41BB",
   disabledPrimaryColor: "rgba(31,65,187,0.5)",
-  successColor: "#00ff00",
+  successColor: "#27ae60",
   warningColor: "#FFC107",
   dangerColor: "#e74c3c",
   infoColor: "#c0c0c0",

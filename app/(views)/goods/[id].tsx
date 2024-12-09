@@ -2,7 +2,11 @@ import PageView from "@/components/PageView";
 import { useLocalSearchParams } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { useEffect, useState } from "react";
-import { getGoodsDetailApi, getGoodsRecordApi } from "@/api/goods";
+import {
+  getGoodsDetailApi,
+  getGoodsMonthDataApi,
+  getGoodsRecordApi,
+} from "@/api/goods";
 import {
   StyleSheet,
   Image,
@@ -17,17 +21,24 @@ import Feather from "@expo/vector-icons/Feather";
 import RecordTable from "@/components/goods/RecordTable";
 import GoodsOperate from "@/components/goods/GoodsOperate";
 import Dialog from "@/components/ui/Dialog";
+import GoodsMonthGrid from "@/components/goods/GoodsMonthGrid";
 export default function GoodsDetail() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [operateType, setOperateType] = useState<number>(1);
   const { id } = useLocalSearchParams();
   const [goodsData, setGoodsData] = useState<GoodsType>();
+  const [goodsMonthData, setGoodsMonthData] = useState({});
   const [recordData, setRecordData] = useState([]);
   const colors = useThemeColor();
   useEffect(() => {
+    getData();
+  }, [id]);
+
+  function getData() {
     getGoodsDetail();
     getGoodsRecord();
-  }, [id]);
+    getGoodsMonthData();
+  }
   function getGoodsDetail() {
     id &&
       getGoodsDetailApi(id).then(({ data }) => {
@@ -42,6 +53,13 @@ export default function GoodsDetail() {
     }).then(({ data }) => {
       setRecordData(() => data.data);
     });
+  }
+  function getGoodsMonthData() {
+    id &&
+      getGoodsMonthDataApi({ goodsId: id }).then(({ data }) => {
+        console.log("商品月度统计", data.data);
+        setGoodsMonthData(data.data);
+      });
   }
   function handleAdd() {
     setOperateType(1);
@@ -89,7 +107,7 @@ export default function GoodsDetail() {
             </ThemedText>
           </View>
         </View>
-        {/*<LineChart />*/}
+        <GoodsMonthGrid data={goodsMonthData}></GoodsMonthGrid>
         <RecordTable data={recordData} search={getGoodsRecord}></RecordTable>
       </ScrollView>
 
@@ -98,7 +116,7 @@ export default function GoodsDetail() {
           goodsData={goodsData}
           type={operateType}
           hide={() => setModalVisible(false)}
-          confirmCallback={getGoodsDetail}
+          confirmCallback={getData}
         ></GoodsOperate>
       </Dialog>
       <View

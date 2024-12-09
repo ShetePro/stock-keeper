@@ -1,4 +1,4 @@
-import { isObject } from "@/utils/is";
+import { isNumber, isObject } from "@/utils/is";
 import dayjs from "dayjs";
 
 export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
@@ -109,9 +109,15 @@ export function getSpacingDay(start: string, end: string) {
   const day = space / (1000 * 60 * 60 * 24);
   return day;
 }
-export function convertTimestamp(
-  timestamp?: number,
-  format = "YYYY-MM-DD",
-) {
+export function convertTimestamp(timestamp?: number, format = "YYYY-MM-DD") {
   return timestamp ? dayjs(timestamp).format(format) : "";
+}
+
+export function NumberShrink(num: number | string, basic = 10000, unit = "万") {
+  const value = isNumber(num) ? num : parseInt(num);
+  if (isNaN(value)) {
+    return num;
+  } else {
+    return value >= 10000 ? value / 10000 + unit : value;
+  }
 }
