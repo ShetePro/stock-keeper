@@ -1,8 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import SearchInput from "@/components/ui/SearchInput";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import GoodsItem from "@/components/goods/GoodsItem";
@@ -20,14 +16,19 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PageView from "@/components/PageView";
 import { ThemedText } from "@/components/ThemedText";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { useEffect, useState } from "react";
+import { getGoodsListApi } from "@/api/goods";
 
 export default function StoreScreen() {
-  const colors = useThemeColor();
+  const [goodsList, setGoodsList] = useState<GoodsType[]>([]);
   const insets = useSafeAreaInsets();
   const bottomHeight = useBottomTabBarHeight();
   const headerOpacity = useSharedValue(1);
   const headerHeight = useSharedValue(40);
+  useEffect(() => {
+    console.log("get goods list");
+    getListData();
+  }, []);
   const scrollHandler = useAnimatedScrollHandler((event) => {
     const offsetY = event.contentOffset.y;
     if (offsetY > 200 && headerOpacity.value === 1) {
@@ -36,7 +37,6 @@ export default function StoreScreen() {
       headerOpacity.value = withTiming(1);
     }
   });
-  console.log(bottomHeight, "bottomHeight");
   const headerAnimatedStyle = useAnimatedStyle(() => {
     const translateY = interpolate(headerOpacity.value, [0, 1], [-50, 0]);
     const height = interpolate(
@@ -55,19 +55,21 @@ export default function StoreScreen() {
       ],
     };
   });
-  const data: ArrayLike<GoodsType> = new Array(10).fill(0).map((_, i) => {
-    return {
-      id: i + 1,
-      cover:
-        "https://img.alicdn.com/imgextra/i2/O1CN01qfSFRM1vCnZtG0TkB_!!2907376137-0-cib.jpg",
-      category: "洗衣液",
-      brandName: "大公鸡",
-      goodsName: "大公鸡洗衣液",
-      price: 59,
-      quantity: 12,
-    };
-  });
-  function openSort() {}
+  function openSort() {
+    getListData();
+  }
+  function getListData() {
+    getGoodsListApi({})
+      .then(({ data }) => {
+        console.log(data.data);
+        setGoodsList(() => {
+          return data.data;
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
     <PageView
       style={{
@@ -97,7 +99,13 @@ export default function StoreScreen() {
           headerTitle: "全部商品",
         }}
       />
-      <View style={{ flexDirection: "row", justifyContent: "space-between", padding: 10 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          padding: 10,
+        }}
+      >
         <SearchInput className={"mb-1"} placeholder={"搜索想要的商品"} />
         <TouchableOpacity
           style={styles.button}
@@ -111,18 +119,21 @@ export default function StoreScreen() {
           />
         </TouchableOpacity>
       </View>
-      <CategoryTabs></CategoryTabs>
+      {/*<CategoryTabs></CategoryTabs>*/}
       <Animated.FlatList
         onScroll={scrollHandler}
         style={[styles.container, { paddingBottom: bottomHeight }]}
-        data={data}
+        data={goodsList}
         numColumns={2}
         renderItem={({ item }) => <GoodsItem {...item}></GoodsItem>}
         keyExtractor={(item) => item.id as string}
         keyboardDismissMode={"on-drag"}
         ListFooterComponent={() => (
           <View className={"items-center justify-center"}>
-            <ThemedText type={'describe'} style={{marginBottom: bottomHeight}}>
+            <ThemedText
+              type={"describe"}
+              style={{ marginBottom: bottomHeight }}
+            >
               没有更多了!
             </ThemedText>
           </View>
