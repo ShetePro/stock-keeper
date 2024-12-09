@@ -1,86 +1,108 @@
 import {
-  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Controller, useForm } from "react-hook-form";
-import { ThemedText } from "@/components/ThemedText";
+import { useForm } from "react-hook-form";
 import PageView from "@/components/PageView";
 import { COLORS } from "@/styles/theme";
-import { FormColumnsType } from "@/types/formTypes";
-import Form from "@/components/form/Form";
 import GoodsPicture from "@/components/goods/GoodsPicture";
 import Card from "@/components/Card";
 import FormItem from "@/components/form/FormItem";
+import NumberInput from "@/components/NumberInput";
+import { createGoodsApi } from "@/api/goods";
+import Toast from "react-native-toast-message";
+import { router } from "expo-router";
+import { useState } from "react";
 
 export default function createGoods() {
+  const [loading, setLoading] = useState(false);
   const {
-    register,
     handleSubmit,
-    watch,
     control,
     formState: { errors },
-  } = useForm();
-  const columns: FormColumnsType = [
-    {
-      label: "流水号",
-      prop: "serialNumber",
-    },
-    {
-      label: "名称",
-      prop: "goodsName",
-    },
-    {
-      label: "类别",
-      prop: "category",
-    },
-    {
-      label: "品牌",
-      prop: "brandName",
-    },
-    {
-      label: "型号",
-      prop: "model",
-    },
-    {
-      label: "价格",
-      prop: "price",
-    },
-    {
-      label: "数量",
-      prop: "quantity",
-    },
-  ];
-  function onSubmit(data: any) {
-    console.log(data);
+  } = useForm({
+    mode: "onChange",
+  });
+  function onSubmit(formData: any) {
+    createGoodsApi(formData).then(({ data }) => {
+      console.log(data);
+      Toast.show({
+        type: "success",
+        text1: "新增成功",
+      });
+      router.replace("/(tabs)/store");
+    });
   }
   return (
     <PageView>
-      <View>
+      <ScrollView style={{ flex: 1 }}>
         <Card style={styles.formCard}>
-          <FormItem control={control} label={"名称"} prop={"goodsName"} />
-          <FormItem control={control} label={"类别"} prop={"category"} />
-          <FormItem control={control} label={"品牌"} prop={"brandName"} />
-          <FormItem control={control} label={"型号"} prop={"model"} />
+          <FormItem
+            control={control}
+            label={"名称"}
+            prop={"goodsName"}
+            inline={false}
+          />
+          <FormItem
+            control={control}
+            label={"类别"}
+            prop={"category"}
+            inline={false}
+          />
+          <FormItem
+            control={control}
+            label={"品牌"}
+            prop={"brandName"}
+            inline={false}
+          />
+          <FormItem
+            labelWidth={80}
+            control={control}
+            label={"商品条码"}
+            prop={"barcode"}
+            inline={false}
+          />
         </Card>
-        <Card style={styles.formCard}>
-          <FormItem control={control} label={"价格"} prop={"price"} />
-          <FormItem control={control} label={"数量"} prop={"quantity"} />
+        <Card style={[styles.formCard]}>
+          <FormItem
+            control={control}
+            label={"价格"}
+            prop={"price"}
+            component={({ field: { onChange, value } }) => (
+              <NumberInput
+                value={value}
+                onChange={onChange}
+                unit={"元"}
+                decimal={true}
+              />
+            )}
+          />
+          <FormItem
+            control={control}
+            label={"数量"}
+            prop={"quantity"}
+            component={({ field: { onChange, value } }) => (
+              <NumberInput value={value} onChange={onChange} unit={"件"} />
+            )}
+          />
         </Card>
-        {/*<Form control={control} columns={columns} inline={false} />*/}
         <FormItem
           labelWidth={100}
           control={control}
           label={"缩略图"}
           prop={"cover"}
           component={({ field: { value, onChange } }) => (
-            <GoodsPicture style={{marginLeft: 80}} url={value} onChange={onChange} />
+            <GoodsPicture
+              style={{ marginLeft: 80 }}
+              url={value}
+              onChange={onChange}
+            />
           )}
         />
-      </View>
+      </ScrollView>
 
       <TouchableOpacity
         style={styles.submitBtn}
