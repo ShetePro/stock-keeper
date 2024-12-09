@@ -7,18 +7,22 @@ import {
   Pressable,
   LayoutRectangle,
 } from "react-native";
-import { useRef, useState} from "react";
+import { useCallback, useRef, useState } from "react";
 import { COLORS } from "@/styles/theme";
 import Animated, {
+  runOnJS,
+  useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import {useThemeColor} from "@/hooks/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { PriorityQueue } from "jest-worker";
+import { onGestureHandlerEvent } from "react-native-gesture-handler/lib/typescript/handlers/gestures/eventReceiver";
 export function CategoryTabs() {
   const [active, setActive] = useState("");
   const [layoutData, setLayoutData] = useState<any>({});
-  const colors = useThemeColor()
+  const colors = useThemeColor();
 
   const activeWidth = useSharedValue(0);
   const translateX = useSharedValue(0);
@@ -43,6 +47,7 @@ export function CategoryTabs() {
     name: "全部",
   });
   function handleLayout(event: LayoutChangeEvent, item: any) {
+    console.log("handleLayout");
     const { nativeEvent } = event;
     const { layout } = nativeEvent;
     setLayoutData((prevState: any) => ({
@@ -56,18 +61,24 @@ export function CategoryTabs() {
   }
 
   function handleChange(item: any) {
+    setActive(item.id);
     const layout = layoutData[item.id];
     translateActive(layout);
-    setActive(item.id);
   }
   function translateActive(layout: LayoutRectangle) {
     activeWidth.value = withTiming(layout.width - 32);
     translateX.value = withSpring(layout.x + 16, {
       clamp: { min: 0, max: maxClamp.current },
       duration: 1200,
-      dampingRatio: 0.5
+      dampingRatio: 0.5,
     });
   }
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+      width: activeWidth.value,
+    };
+  });
 
   return (
     <View className={"flex flex-row items-center justify-start gap-1 relative"}>
@@ -76,7 +87,7 @@ export function CategoryTabs() {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {categoryList.map((item, index) => (
+        {categoryList.map((item) => (
           <Pressable
             className={"z-10"}
             onLayout={(event) => handleLayout(event, item)}
@@ -87,23 +98,17 @@ export function CategoryTabs() {
               style={styles.category}
               className={"pl-4 pt-2 pr-4 pb-2 rounded-xl"}
             >
-              <Text
-                style={{
-                  color: item.id === active ? colors.active : colors.tint,
-                  fontWeight: item.id === active ? 'bold' : '400',
-                  fontSize: item.id === active ? 16 : 14,
-                }}
-                className={"transition duration-300"}
+              <Animated.Text
+                style={active === item.id ? styles.activeTab : styles.tab}
+                className={`transition duration-300`}
               >
                 {item.name}
-              </Text>
+              </Animated.Text>
             </View>
           </Pressable>
         ))}
-        <Animated.View
-          style={{ transform: [{ translateX }], width: activeWidth, ...styles.active }}
-        >
-          {activeWidth && <View style={styles.activeBox}></View>}
+        <Animated.View style={[animatedStyle, styles.active]}>
+          {<View style={styles.activeBox}></View>}
         </Animated.View>
       </ScrollView>
     </View>
@@ -126,6 +131,16 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 10,
+  },
+  activeTab: {
+    color: COLORS.primaryColor,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  tab: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontWeight: "400",
   },
   category: {
     zIndex: 99,
