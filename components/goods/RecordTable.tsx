@@ -77,7 +77,7 @@ export default function RecordTable({
         </View>
         {data.map((item) => {
           return (
-            <View className={"flex flex-row justify-around mt-5 gap-5"}>
+            <View className={"flex flex-row justify-around items-center mt-5 gap-5"} key={item.id}>
               <View className={"flex flex-col flex-grow"}>
                 <Tag
                   type={item.type === 1 ? "success" : "danger"}
