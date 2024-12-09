@@ -1,11 +1,11 @@
 type GoodsType = {
-  category: string | number
+  category: string
   goodsName: string
   quantity: number
   brandName?: string
   model?: string
   id?: string | number
-  serialNumber?: string
+  barcode?: string
   cover?: string
   price?: number
 }
