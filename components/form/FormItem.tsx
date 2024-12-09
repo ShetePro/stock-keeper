@@ -1,4 +1,11 @@
-import { StyleSheet, TextInput, View, ViewStyle, Text } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  ViewStyle,
+  Text,
+  StyleProp,
+} from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import {
   Control,
@@ -13,7 +20,7 @@ import { COLORS } from "@/styles/theme";
 type FormItemProps = Partial<FormColumnType> & {
   control: Control<any> | undefined;
   prop: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   formState?: FormState<FieldValues>;
   labelWidth?: number;
   inline?: boolean;
@@ -32,15 +39,23 @@ export default function FormItem({
   inline = true,
   control,
   labelWidth = 50,
+  style,
   component,
   rules,
   errors,
 }: FormItemProps) {
   const error = errors ? errors[prop]?.message : "";
   return (
-    <View style={[styles.field, inline && styles.inline]} key={prop}>
+    <View
+      style={[styles.field, inline && styles.inline, style]}
+      key={prop}
+    >
       {label && (
-        <ThemedText numberOfLines={1} ellipsizeMode={'tail'} style={{ width: labelWidth, height: 30, textAlign: "left" }}>
+        <ThemedText
+          numberOfLines={1}
+          ellipsizeMode={"tail"}
+          style={{ width: labelWidth, height: 30, textAlign: "left" }}
+        >
           {label}:{" "}
         </ThemedText>
       )}
@@ -86,9 +101,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "#ccc",
+    // borderWidth: 1,
+    // borderRadius: 5,
+    // borderColor: "#ccc",
     padding: 5,
     height: 40,
   },
