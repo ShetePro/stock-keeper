@@ -6,7 +6,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 export default function CenterTabBarButton() {
   const colors = useThemeColor();
   function goCreateGoods() {
-    router.push("/(views)/createGoods");
+    router.push("/(views)/goods/create");
   }
   return (
     <Pressable style={styles.centerWarp} onPress={goCreateGoods}>

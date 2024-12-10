@@ -5,7 +5,7 @@ export default function ViewsLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name={"createGoods/index"}
+        name={"goods/create"}
         options={{
           headerTitle: "新建商品",
           headerLeft: () => <BackRouteIcon />,
@@ -15,6 +15,13 @@ export default function ViewsLayout() {
         name={"goods/[id]"}
         options={{
           headerTitle: "商品详情",
+          headerLeft: () => <BackRouteIcon />,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name={"brand/create"}
+        options={{
+          headerTitle: "选择品牌",
           headerLeft: () => <BackRouteIcon />,
         }}
       ></Stack.Screen>

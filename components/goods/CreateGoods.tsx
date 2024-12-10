@@ -16,8 +16,10 @@ import { createGoodsApi } from "@/api/goods";
 import Toast from "react-native-toast-message";
 import { router } from "expo-router";
 import { useState } from "react";
+import BrandSelect from "@/components/brand/BrandSelect";
+import Loading from "@/components/ui/Loading";
 
-export default function createGoods() {
+export default function CreateGoods() {
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -27,14 +29,17 @@ export default function createGoods() {
     mode: "onChange",
   });
   function onSubmit(formData: any) {
-    createGoodsApi(formData).then(({ data }) => {
-      console.log(data);
-      Toast.show({
-        type: "success",
-        text1: "新增成功",
-      });
-      router.replace("/(tabs)/store");
-    });
+    setLoading(true);
+    createGoodsApi(formData)
+      .then(({ data }) => {
+        console.log(data);
+        Toast.show({
+          type: "success",
+          text1: "新增成功",
+        });
+        router.replace("/(tabs)/store");
+      })
+      .finally(() => setLoading(false));
   }
   return (
     <PageView>
@@ -43,34 +48,36 @@ export default function createGoods() {
           <FormItem
             style={styles.formItem}
             control={control}
-            labelWidth={80}
             label={"名称"}
             prop={"goodsName"}
           />
           <FormItem
             style={styles.formItem}
             control={control}
-            labelWidth={80}
             label={"类别"}
             prop={"category"}
           />
           <FormItem
             style={styles.formItem}
             control={control}
-            labelWidth={80}
             label={"品牌"}
-            prop={"brandName"}
+            prop={"brand"}
+            component={({ field: { onChange, value } }) => (
+              <BrandSelect
+                value={value}
+                onChange={(brand) => onChange(brand.id)}
+              />
+            )}
           />
           <FormItem
             style={styles.formItem}
-            labelWidth={80}
             control={control}
             label={"商品条码"}
             prop={"barcode"}
           />
           <FormItem
             control={control}
-            label={"价格"}
+            label={"进货价"}
             prop={"price"}
             component={({ field: { onChange, value } }) => (
               <NumberInput
@@ -108,9 +115,14 @@ export default function createGoods() {
       <TouchableOpacity
         style={styles.submitBtn}
         activeOpacity={0.8}
+        disabled={loading}
         onPress={handleSubmit(onSubmit)}
       >
-        <Text style={{ color: COLORS.white }}>提交</Text>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Text style={{ color: COLORS.white }}>提交</Text>
+        )}
       </TouchableOpacity>
     </PageView>
   );
