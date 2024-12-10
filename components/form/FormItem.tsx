@@ -38,7 +38,7 @@ export default function FormItem({
   prop,
   inline = true,
   control,
-  labelWidth = 50,
+  labelWidth,
   style,
   component,
   rules,

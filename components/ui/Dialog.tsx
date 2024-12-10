@@ -8,29 +8,40 @@ import {
 import { ReactNode, useEffect, useState } from "react";
 import Animated, {
   Easing,
+  interpolate,
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { COLORS } from "@/styles/theme";
 
 type DialogProps = {
   children: ReactNode | JSX.Element;
   visible: boolean;
   hide: () => void;
+  wrapperClose?: boolean;
+  mask?: boolean;
   animationType?: "slide" | "none" | "fade" | undefined;
 };
 const { height } = Dimensions.get("window");
 let timing: string | number | NodeJS.Timeout | null | undefined = null;
-export default function Dialog({ children, visible, hide }: DialogProps) {
+export default function Dialog({
+  children,
+  visible,
+  hide,
+  mask,
+  wrapperClose = true,
+}: DialogProps) {
   const [dialogVisible, setDialogVisible] = useState<boolean>(visible);
   const slideValue = useSharedValue(height);
   const fadeValue = useSharedValue(0);
   useEffect(() => {
-    console.log('modalVisible', visible)
+    console.log("modalVisible", visible);
     if (visible) {
-      showDialog()
-    }else {
-      hideDialog()
+      showDialog();
+    } else {
+      hideDialog();
     }
   }, [visible]);
   const dialogAnimatedStyle = useAnimatedStyle(() => {
@@ -39,7 +50,18 @@ export default function Dialog({ children, visible, hide }: DialogProps) {
       transform: [{ translateY: slideValue.value }],
     };
   });
+  const wrapperAnimatedStyle = useAnimatedStyle(() => {
+    const bgColor = interpolateColor(
+      slideValue.value,
+      [height, 0],
+      ["transparent", "rgba(0,0,0,0.7)"],
+    );
+    return {
+      backgroundColor: bgColor,
+    };
+  });
   function showDialog() {
+    if (timing) clearTimeout(timing);
     setDialogVisible(true);
     fadeValue.value = withTiming(1, {
       duration: 400,
@@ -60,6 +82,9 @@ export default function Dialog({ children, visible, hide }: DialogProps) {
       hide();
     }, 500);
   }
+  function handleWrapper() {
+    wrapperClose && hideDialog();
+  }
   return (
     <Modal
       animationType="none"
@@ -68,11 +93,11 @@ export default function Dialog({ children, visible, hide }: DialogProps) {
       onShow={showDialog}
       onRequestClose={hideDialog}
     >
-      <TouchableWithoutFeedback onPress={hideDialog}>
-        <Animated.View style={[styles.centeredView, dialogAnimatedStyle]}>
-          <TouchableWithoutFeedback>
-            <View>{children}</View>
-          </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={handleWrapper}>
+        <Animated.View style={[wrapperAnimatedStyle, { flex: 1 }]}>
+          <Animated.View style={[styles.centeredView, dialogAnimatedStyle]}>
+            <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
+          </Animated.View>
         </Animated.View>
       </TouchableWithoutFeedback>
     </Modal>

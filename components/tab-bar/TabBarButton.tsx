@@ -8,7 +8,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { COLORS } from "@/styles/theme";
-import {useThemeColor} from "@/hooks/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 type TabBarButtonProps = {
   routeName: string;
   onPress: () => void;
