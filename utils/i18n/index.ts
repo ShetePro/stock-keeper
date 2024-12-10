@@ -3,6 +3,12 @@ import { initReactI18next } from "react-i18next";
 
 const resources = {
   en: {
+    tabs: {
+      home: 'Home',
+      store: 'Store',
+      charts: 'Charts',
+      user: 'User',
+    },
     login: {
       title: "Login here",
       registerTitle: "Create Account",
@@ -22,6 +28,12 @@ const resources = {
     },
   },
   cn: {
+    tabs: {
+      home: '首页',
+      store: '仓库',
+      charts: '图表',
+      user: '我的',
+    },
     login: {
       title: "在这里登陆",
       registerTitle: "创建账户",

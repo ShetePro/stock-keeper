@@ -7,8 +7,9 @@ import TabBar from "@/components/tab-bar/TabBar";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useSession } from "@/components/SessionProvider";
 import { ThemedText } from "@/components/ThemedText";
+import { WithTranslation, withTranslation } from "react-i18next";
 
-export default function TabLayout() {
+function TabLayout({ t }: WithTranslation) {
   const colors = useThemeColor();
   const { session, isLoading } = useSession();
   if (isLoading) {
@@ -33,27 +34,28 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("home"),
         }}
       />
       <Tabs.Screen
         name="store"
         options={{
-          title: "Store",
+          title: t("store"),
         }}
       />
       <Tabs.Screen
         name="charts"
         options={{
-          title: "Charts",
+          title: t("charts"),
         }}
       />
       <Tabs.Screen
         name="user"
         options={{
-          title: "Explore",
+          title: t("user"),
         }}
       />
     </Tabs>
   );
 }
+export default withTranslation("tabs")(TabLayout);
