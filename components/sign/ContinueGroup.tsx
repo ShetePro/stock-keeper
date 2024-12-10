@@ -5,9 +5,9 @@ import { WithTranslation, withTranslation } from "react-i18next";
 
 function ContinueGroup({ t }: WithTranslation) {
   return (
-    <View className={"flex flex-col items-center justify-center flex-grow"}>
+    <View className={"flex flex-col items-center justify-center"} style={{ height: 80}}>
       <Text
-        className={"font-bold mb-10 mt-10"}
+        className={"font-bold mb-5"}
         style={{ color: COLORS.primaryColor }}
       >
         {t("continue")}
