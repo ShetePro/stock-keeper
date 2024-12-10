@@ -121,3 +121,28 @@ export function NumberShrink(num: number | string, basic = 10000, unit = "万") 
     return value >= 10000 ? value / 10000 + unit : value;
   }
 }
+
+
+// 遍历获取className的节点
+export function getElementsByClassName(dom: any, className: string) {
+  let results: any[] = [];
+
+  // 递归遍历节点
+  function traverse(node: any) {
+    if (
+      node.type === "tag" &&
+      node.attribs &&
+      node.attribs.class === className
+    ) {
+      results.push(node);
+    }
+
+    // 遍历子节点
+    if (node.children) {
+      node.children.forEach((child: any) => traverse(child));
+    }
+  }
+
+  traverse(dom);
+  return results;
+}
