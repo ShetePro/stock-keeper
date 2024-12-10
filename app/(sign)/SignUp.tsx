@@ -81,12 +81,12 @@ function SignUp({ t }: WithTranslation) {
         overflow: "hidden",
       }}
     >
-      <View className={"mt-10 mb-10 z-10 pl-10 pr-10 flex flex-col h-full"}>
-        <View className={"flex flex-col items-center mb-10"}>
+      <View className={"mt-5 mb-5 z-10 pl-10 pr-10 flex flex-col h-full"}>
+        <View className={"flex flex-col items-center"}>
           <Text style={styles.title}>{t("registerTitle")}</Text>
           <Text style={styles.hello}>{t("registerDescription")}</Text>
         </View>
-        <View className={"mb-10"}>
+        <View className={"mb-10"} style={{ }}>
           <LabelMove
             label={t("account")}
             height={64}
@@ -190,7 +190,7 @@ function SignUp({ t }: WithTranslation) {
             </ThemedText>
           )}
         </TouchableOpacity>
-        <Pressable onPress={goLogin} className={"mt-10"}>
+        <Pressable onPress={goLogin} className={"mt-5 mb-5 items-center"} style={{height: 30}}>
           <Text className={"text-center font-bold  p-2"}>
             {t("haveAccount")}
           </Text>

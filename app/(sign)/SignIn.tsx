@@ -82,13 +82,14 @@ function SignIn({ t }: WithTranslation) {
   return (
     <SignView
       style={{
+        flex: 1,
         backgroundColor: "white",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      <View className={"mt-10 mb-10 z-10 pl-10 pr-10 flex flex-col h-full"}>
-        <View className={"flex flex-col items-center mb-10"}>
+      <View className={"mt-10 mb-10 z-10 pl-10 pr-10 flex flex-col h-full gap-5"}>
+        <View className={"flex flex-col items-center"}>
           <Text style={styles.title}>{t("title")}</Text>
           <Text style={styles.hello}>{t("welcome")}</Text>
         </View>
