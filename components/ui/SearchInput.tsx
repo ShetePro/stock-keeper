@@ -1,11 +1,16 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import {NativeSyntheticEvent, StyleSheet, TextInput, TextInputChangeEventData, View} from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 
 type SearchInputProps = {
   placeholder: string;
-  className: string | undefined
+  className: string | undefined;
+  onChange: (value: string) => void;
 };
 export default function SearchInput(props: SearchInputProps) {
+  function handleChange (e:  NativeSyntheticEvent<TextInputChangeEventData>) {
+    console.log(e.nativeEvent)
+    props.onChange && props.onChange(e.nativeEvent.text)
+  }
   return (
     <View style={styles.box} className={props.className}>
       <View style={styles.prefix}>
@@ -14,6 +19,7 @@ export default function SearchInput(props: SearchInputProps) {
       <TextInput
         style={styles.input}
         {...props}
+        onChange={handleChange}
         placeholderTextColor={"#ccc"}
       ></TextInput>
     </View>

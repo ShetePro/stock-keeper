@@ -9,7 +9,7 @@ export default function BackRouteIcon() {
     router.back();
   }
   return (
-    <Pressable onPress={backRouter}>
+    <Pressable onPress={backRouter} style={{padding: 10}}>
       <AntDesign name="left" size={24} color={colors.icon} />
     </Pressable>
   );

@@ -14,7 +14,6 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { COLORS } from "@/styles/theme";
 
 type DialogProps = {
   children: ReactNode | JSX.Element;
