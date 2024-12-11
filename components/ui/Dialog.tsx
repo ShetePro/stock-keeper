@@ -1,6 +1,9 @@
 import {
   Dimensions,
+  DimensionValue,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -8,12 +11,12 @@ import {
 import { ReactNode, useEffect, useState } from "react";
 import Animated, {
   Easing,
-  interpolate,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 type DialogProps = {
   children: ReactNode | JSX.Element;
@@ -21,6 +24,7 @@ type DialogProps = {
   hide: () => void;
   wrapperClose?: boolean;
   mask?: boolean;
+  bodyHeight?: DimensionValue;
   animationType?: "slide" | "none" | "fade" | undefined;
 };
 const { height } = Dimensions.get("window");
@@ -30,13 +34,14 @@ export default function Dialog({
   visible,
   hide,
   mask,
+  bodyHeight = 400,
   wrapperClose = true,
 }: DialogProps) {
+  const colors = useThemeColor();
   const [dialogVisible, setDialogVisible] = useState<boolean>(visible);
   const slideValue = useSharedValue(height);
   const fadeValue = useSharedValue(0);
   useEffect(() => {
-    console.log("modalVisible", visible);
     if (visible) {
       showDialog();
     } else {
@@ -95,7 +100,25 @@ export default function Dialog({
       <TouchableWithoutFeedback onPress={handleWrapper}>
         <Animated.View style={[wrapperAnimatedStyle, { flex: 1 }]}>
           <Animated.View style={[styles.centeredView, dialogAnimatedStyle]}>
-            <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+              {/*{children}*/}
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+              >
+                <View
+                  style={[
+                    styles.dialogView,
+                    {
+                      backgroundColor: colors.background,
+                      height: bodyHeight,
+                      minHeight: bodyHeight,
+                    },
+                  ]}
+                >
+                  {children}
+                </View>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
           </Animated.View>
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -108,5 +131,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  dialogView: {
+    width: "80%",
+    overflow: "hidden",
+    borderRadius: 20,
   },
 });
