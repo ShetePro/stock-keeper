@@ -15,7 +15,7 @@ import { COLORS } from "@/styles/theme";
 import { getBrandPinguanApi } from "@/api/brand";
 import { useEffect, useState } from "react";
 import * as htmlparser2 from "htmlparser2";
-import {getElementsByClassName} from "@/utils/util";
+import { getElementsByClassName } from "@/utils/util";
 
 export type OutsiderBrandType = {
   id: string;
@@ -27,7 +27,10 @@ type BrandOutsiderProps = {
   onSelect: (brand: OutsiderBrandType) => void;
   keyword?: string;
 };
-export default function BrandOutsider({ onSelect, keyword }: BrandOutsiderProps) {
+export default function BrandOutsider({
+  onSelect,
+  keyword,
+}: BrandOutsiderProps) {
   const colors = useThemeColor();
   const [searchText, setSearchText] = useState(keyword);
   const [brandPgList, setBrandPgList] = useState<OutsiderBrandType[]>([]);
@@ -57,65 +60,58 @@ export default function BrandOutsider({ onSelect, keyword }: BrandOutsiderProps)
   }
   function clickBrand(item: OutsiderBrandType) {
     console.log(item);
-    onSelect && onSelect(item)
+    onSelect && onSelect(item);
   }
 
-
   return (
-    <PageView style={{ backgroundColor: colors.background }}>
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: 10,
-          }}
+    <View style={{height: '100%'}}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          padding: 10,
+        }}
+      >
+        <SearchInput
+          className={"mb-1"}
+          placeholder={"搜索想要的商品"}
+          onChange={setSearchText}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={getList}
         >
-          <SearchInput
-            className={"mb-1"}
-            placeholder={"搜索想要的商品"}
-            onChange={setSearchText}
-          />
-          <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.8}
-            onPress={getList}
-          >
-            <MaterialCommunityIcons
-              name="store-search"
-              size={24}
-              color="#fff"
-            />
-          </TouchableOpacity>
-        </View>
-        <ScrollView>
-          <View>
-            {brandPgList.map((item: any) => (
-              <Pressable
-                key={item.id}
-                className={"flex flex-row items-center p-2"}
-                onPress={() => clickBrand(item)}
-              >
-                <Image
-                  resizeMode={"contain"}
-                  source={{
-                    width: 100,
-                    height: 50,
-                    uri: item.logo,
-                  }}
-                ></Image>
-                <View className={"flex flex-col justify-center gap-2"}>
-                  <Text className={"text-md font-bold"}>{item.branName}</Text>
-                  <Text style={{ color: colors.tabIconDefault, fontSize: 12 }}>
-                    {item.description}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
-          </View>
-        </ScrollView>
+          <MaterialCommunityIcons name="store-search" size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
-    </PageView>
+      <ScrollView>
+        <View>
+          {brandPgList.map((item: any) => (
+            <Pressable
+              key={item.id}
+              className={"flex flex-row items-center p-2"}
+              onPress={() => clickBrand(item)}
+            >
+              <Image
+                resizeMode={"contain"}
+                source={{
+                  width: 100,
+                  height: 50,
+                  uri: item.logo,
+                }}
+              ></Image>
+              <View className={"flex flex-col justify-center gap-2"}>
+                <Text className={"text-md font-bold"}>{item.branName}</Text>
+                <Text style={{ color: colors.tabIconDefault, fontSize: 12 }}>
+                  {item.description}
+                </Text>
+              </View>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({

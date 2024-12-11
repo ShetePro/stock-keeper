@@ -10,21 +10,29 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
-import { getBrandDetailApi } from "@/api/brand";
+import { getBrandDetailApi, getBrandMonthStatisticsApi } from "@/api/brand";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { getGoodsListApi } from "@/api/goods";
 import Loading from "@/components/ui/Loading";
+import GoodsMonthGrid from "@/components/goods/GoodsMonthGrid";
 
 export function BrandListPage() {
   const { id } = useLocalSearchParams();
   const [brandData, setBrandData] = useState<BrandType>({});
+  const [monthData, setMonthData] = useState({});
   const [goodsList, setGoodsList] = useState<GoodsType[]>([]);
   const [loading, setLoading] = useState(false);
   const colors = useThemeColor();
   useEffect(() => {
     getBrandDetail();
     getListData();
+    getStatistics();
   }, [id]);
+  function getStatistics() {
+    getBrandMonthStatisticsApi(id).then(({ data }) => {
+      setMonthData(data.data);
+    });
+  }
   function getBrandDetail() {
     id &&
       getBrandDetailApi(id).then(({ data }) => {
@@ -68,14 +76,15 @@ export function BrandListPage() {
           </Text>
         </View>
       </View>
-      <ScrollView style={{flex: 1}}>
+      <GoodsMonthGrid data={monthData}></GoodsMonthGrid>
+      <ScrollView style={{ flex: 1 }}>
         {loading ? (
           <Loading />
         ) : (
           goodsList.map((item: GoodsType) => (
             <Pressable
               key={item.id}
-              className={"flex flex-row items-center gap-2 p-5"}
+              className={"flex flex-row flex-grow items-center gap-2 p-5"}
               onPress={() => goDetail(item)}
             >
               <Image
@@ -90,8 +99,8 @@ export function BrandListPage() {
                     : require("@/assets/images/empty-goods.png")
                 }
               ></Image>
-              <View className={"flex flex-col justify-around"}>
-                <Text className={"text-xl"}>{item.goodsName}</Text>
+              <View className={"flex flex-col flex-grow justify-around basis-0"}>
+                <Text  className={"text-xl"}>{item.goodsName}</Text>
                 <View className={"flex flex-row gap-2 pt-2"}>
                   <Text className={"text-gray-500"}>
                     库存 {item.quantity}件

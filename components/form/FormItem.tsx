@@ -46,10 +46,7 @@ export default function FormItem({
 }: FormItemProps) {
   const error = errors ? errors[prop]?.message : "";
   return (
-    <View
-      style={[styles.field, inline && styles.inline, style]}
-      key={prop}
-    >
+    <View style={[styles.field, inline && styles.inline, style]} key={prop}>
       {label && (
         <ThemedText
           numberOfLines={1}
@@ -92,10 +89,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     margin: 10,
+    width: "100%",
   },
   inline: {
     flexDirection: "row",
     alignItems: "center",
+    width: "100%",
   },
   control: {
     flex: 1,

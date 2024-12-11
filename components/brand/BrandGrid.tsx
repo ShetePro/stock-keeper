@@ -45,6 +45,9 @@ export default function BrandGrid() {
       console.log(data.data);
     });
   }
+  function goBrandDetail(item: BrandType) {
+    router.push(`/(views)/brand/${item.id}`);
+  }
   function openAdd() {
     setAddVisible(true);
   }
@@ -92,7 +95,11 @@ export default function BrandGrid() {
       <ScrollView>
         <View className={"flex flex-row flex-wrap justify-between gap-4"}>
           {brandList.map((item: BrandType) => (
-            <Pressable key={item.id} className={"p-5 w-[30%] h-[100]"}>
+            <Pressable
+              key={item.id}
+              className={"p-5 w-[30%] h-[100]"}
+              onPress={() => goBrandDetail(item)}
+            >
               <Image
                 className={"w-full h-full"}
                 resizeMode="contain"
@@ -114,60 +121,47 @@ export default function BrandGrid() {
         wrapperClose={false}
         mask={true}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        <View
           className={
-            "w-full h-1/2 p-5 flex flex-col items-center justify-between"
+            "bg-gray-50 w-full h-full p-5 flex flex-col items-center justify-between"
           }
         >
-          <View
-            className={
-              "bg-gray-50 w-full h-full p-5 flex flex-col items-center justify-between rounded-2xl"
-            }
-          >
-            <View className={"w-full flex flex-col flex-grow"}>
-              <FormItem
-                control={control}
-                label={"品牌名称"}
-                prop={"brandName"}
-              />
-              <FormItem control={control} label={"英文名称"} prop={"enName"} />
-              <FormItem control={control} label={"编码"} prop={"code"} />
-              <FormItem control={control} label={"图标"} prop={"logo"} />
-              <FormItem control={control} label={"备注"} prop={"remark"} />
-            </View>
-            <View className={"flex flex-row gap-5 pb-5"}>
-              <TouchableOpacity
-                onPress={closeAdd}
-                className={
-                  "h-10 rounded-xl flex flex-grow flex-row items-center justify-center"
-                }
-                style={{ backgroundColor: COLORS.infoColor }}
-              >
-                <Text className={"text-gray-100"}>取消</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                disabled={loading}
-                className={
-                  "h-10 rounded-xl flex flex-grow flex-row items-center justify-center"
-                }
-                style={{ backgroundColor: COLORS.successColor }}
-              >
-                {loading ? (
-                  <Loading />
-                ) : (
-                  <Text className={"text-gray-100"}>确定</Text>
-                )}
-              </TouchableOpacity>
-            </View>
+          <View className={"flex flex-col flex-grow"}>
+            <FormItem control={control} label={"品牌名称"} prop={"brandName"} />
+            <FormItem control={control} label={"英文名称"} prop={"enName"} />
+            <FormItem control={control} label={"编码"} prop={"code"} />
+            <FormItem control={control} label={"图标"} prop={"logo"} />
+            <FormItem control={control} label={"备注"} prop={"remark"} />
           </View>
-        </KeyboardAvoidingView>
+          <View className={"flex flex-row gap-5 pb-5"}>
+            <TouchableOpacity
+              onPress={closeAdd}
+              className={
+                "h-10 rounded-xl flex flex-grow flex-row items-center justify-center"
+              }
+              style={{ backgroundColor: COLORS.infoColor }}
+            >
+              <Text className={"text-gray-100"}>取消</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleSubmit(onSubmit)}
+              disabled={loading}
+              className={
+                "h-10 rounded-xl flex flex-grow flex-row items-center justify-center"
+              }
+              style={{ backgroundColor: COLORS.successColor }}
+            >
+              {loading ? (
+                <Loading />
+              ) : (
+                <Text className={"text-gray-100"}>确定</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
       </Dialog>
       <Dialog visible={outsiderVisible} hide={() => setOutsiderVisible(false)}>
-        <View className={'w-4/5 h-2/3 bg-gray-100'}>
-          <BrandOutsider onSelect={outsiderAdd} />
-        </View>
+        <BrandOutsider onSelect={outsiderAdd} />
       </Dialog>
     </Card>
   );

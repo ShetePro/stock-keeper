@@ -2,7 +2,7 @@ type GoodsType = {
   category: string;
   goodsName: string;
   quantity: number;
-  brandName?: string;
+  brand?: string;
   model?: string;
   id?: string | number;
   barcode?: string;
