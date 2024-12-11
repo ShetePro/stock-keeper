@@ -32,7 +32,7 @@ export default function GoodsMonthGrid({ data }: { data: any }) {
       },
     },
   ].map((item) => {
-    const value = data[item.prop] || item.value
+    const value = data[item.prop] || item.value;
     return {
       ...item,
       value: NumberShrink(value),

@@ -96,7 +96,7 @@ export default function GoodsDetail() {
               flex: 1,
               flexDirection: "row",
               justifyContent: "flex-end",
-              marginVertical: 5
+              marginVertical: 5,
             }}
           >
             <Tag label={goodsData?.category} type={"primary"}></Tag>
@@ -128,12 +128,14 @@ export default function GoodsDetail() {
       </ScrollView>
 
       <Dialog visible={modalVisible} hide={() => setModalVisible(false)}>
-        <GoodsOperate
-          goodsData={goodsData}
-          type={operateType}
-          hide={() => setModalVisible(false)}
-          confirmCallback={getData}
-        ></GoodsOperate>
+        <View>
+          <GoodsOperate
+            goodsData={goodsData}
+            type={operateType}
+            hide={() => setModalVisible(false)}
+            confirmCallback={getData}
+          ></GoodsOperate>
+        </View>
       </Dialog>
       <View
         className={

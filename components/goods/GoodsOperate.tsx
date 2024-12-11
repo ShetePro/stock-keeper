@@ -26,6 +26,7 @@ export default function GoodsOperate({
 }) {
   const [price, setPrice] = useState<string | number>(goodsData?.price || 0);
   const [num, setNum] = useState<string | number>(1);
+  const [total, setTotal] = useState<string | number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   function changeNum(value: string | number) {
     setNum(value);
@@ -36,9 +37,10 @@ export default function GoodsOperate({
       setLoading(true);
       goodsOutInRecordApi({
         goodsId: goodsData.id,
+        brand: goodsData.brand || "",
         quantity: num,
-        totalNum: getTotal(),
-        price,
+        totalNum: total,
+        price: isOut ? Number(total) / Number(num) : price,
         type,
       })
         .then(({ data }) => {
@@ -58,26 +60,27 @@ export default function GoodsOperate({
   }, [num, price]);
   return (
     <View style={styles.modalView}>
-      <ThemedText type={"subtitle"} className={"text-center mb-2"}>
-        {type === 1 ? "入库" : "出货"}
-      </ThemedText>
-      <View>
-        <View style={styles.row}>
-          <Text style={styles.modalText}>价格</Text>
-          <NumberInput
-            value={price as string}
-            onChange={setPrice}
-            min={0}
-            unit={"元"}
-          />
-        </View>
+      <View className={"flex flex-col gap-5"}>
+        <ThemedText type={"subtitle"} className={"text-center mb-5"}>
+          {type === 1 ? "入库" : "出货"}
+        </ThemedText>
+        {type === 1 && (
+          <View style={styles.row}>
+            <Text style={styles.modalText}>价格</Text>
+            <NumberInput
+              value={price as string}
+              onChange={setPrice}
+              min={0}
+              unit={"元"}
+            />
+          </View>
+        )}
         <View style={styles.row}>
           <Text style={styles.modalText}>数量</Text>
           <NumberInput
             value={num as string}
             onChange={changeNum}
-            min={1}
-            max={goodsData?.quantity}
+            max={type === 2 ? goodsData?.quantity : 99999999}
             unit={"件"}
           />
         </View>
@@ -85,9 +88,18 @@ export default function GoodsOperate({
           <Text style={styles.modalText} className={"font-bold text-xl"}>
             总金额
           </Text>
-          <Text className={"text-red-500 text-2xl font-bold"}>
-            ¥{getTotal()}
-          </Text>
+          {type === 1 ? (
+            <Text className={"text-red-500 text-2xl font-bold"}>
+              ¥{getTotal()}
+            </Text>
+          ) : (
+            <NumberInput
+              value={total as string}
+              onChange={setTotal}
+              min={0}
+              unit={"元"}
+            />
+          )}
         </View>
       </View>
       <View
@@ -113,30 +125,19 @@ export default function GoodsOperate({
 }
 const styles = StyleSheet.create({
   modalView: {
-    width: "80%",
-    height: 300,
-    margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 25,
+    height: "100%",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   row: {
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
   },
   button: {
     flex: 1,
