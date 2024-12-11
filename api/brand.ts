@@ -12,6 +12,12 @@ export function createBrandApi(data: any) {
   });
 }
 
+// 详情
+export function getBrandDetailApi(id: string | string[]) {
+  return request.get({
+    url: `/api/brand/${id}`,
+  });
+}
 // 调用品观网api 获取品牌列表
 export function getBrandPinguanApi(params: any) {
   return request.get(
@@ -23,5 +29,5 @@ export function getBrandPinguanApi(params: any) {
       joinPrefix: false,
       isTransformRequestResult: false,
     },
-  )
+  );
 }

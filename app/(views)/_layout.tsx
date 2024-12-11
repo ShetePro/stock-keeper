@@ -12,6 +12,13 @@ export default function ViewsLayout() {
         }}
       ></Stack.Screen>
       <Stack.Screen
+        name={"brand/[id]"}
+        options={{
+          headerTitle: "品牌详情",
+          headerLeft: () => <BackRouteIcon />,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
         name={"goods/[id]"}
         options={{
           headerTitle: "商品详情",

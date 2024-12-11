@@ -19,7 +19,7 @@ import { useState } from "react";
 import BrandSelect from "@/components/brand/BrandSelect";
 import Loading from "@/components/ui/Loading";
 
-export default function CreateGoods() {
+export default function CreateGoods({ brand }: { brand: string | string[] }) {
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -27,6 +27,9 @@ export default function CreateGoods() {
     formState: { errors },
   } = useForm({
     mode: "onChange",
+    defaultValues: {
+      brand: brand,
+    },
   });
   function onSubmit(formData: any) {
     setLoading(true);
@@ -37,7 +40,11 @@ export default function CreateGoods() {
           type: "success",
           text1: "新增成功",
         });
-        router.replace("/(tabs)/store");
+        if (brand) {
+          router.back();
+        } else {
+          router.replace("/(tabs)/store");
+        }
       })
       .finally(() => setLoading(false));
   }
