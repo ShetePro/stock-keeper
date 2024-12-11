@@ -7,7 +7,9 @@ type GoodsType = {
   id?: string | number;
   barcode?: string;
   cover?: string;
+  sales?: number;
   price?: number;
+  brandData?: BrandType
 };
 type BrandType = {
   id?: string

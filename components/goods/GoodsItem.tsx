@@ -13,7 +13,7 @@ import Card from "@/components/Card";
 export default function GoodsItem(props: GoodsType) {
   const theme = useColorScheme();
   function goDetail() {
-    console.log(props)
+    console.log(props);
     router.push(`/(views)/goods/${props.id}`);
   }
   return (
@@ -24,6 +24,7 @@ export default function GoodsItem(props: GoodsType) {
     >
       <Pressable onPress={goDetail}>
         <Image
+          resizeMode={"contain"}
           style={styles.cover}
           source={
             props.cover

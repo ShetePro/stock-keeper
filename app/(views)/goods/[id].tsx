@@ -43,6 +43,7 @@ export default function GoodsDetail() {
     id &&
       getGoodsDetailApi(id).then(({ data }) => {
         setGoodsData(() => data.data);
+        console.log(data.data);
       });
   }
   function getGoodsRecord(params?: any) {
@@ -73,6 +74,7 @@ export default function GoodsDetail() {
     <PageView style={{ backgroundColor: colors.background }}>
       <ScrollView style={{ flex: 1 }}>
         <Image
+          resizeMode={"contain"}
           className={"w-full h-[300px] object-cover"}
           source={
             goodsData?.cover
@@ -80,27 +82,41 @@ export default function GoodsDetail() {
               : require("@/assets/images/empty-goods.png")
           }
         />
-        <View className={"ml-5 mr-5"}>
+        <View className={"m-5"}>
           <View className={"flex flex-row justify-between"}>
-            <ThemedText type={"subtitle"} className={"mb-5"}>
+            <ThemedText
+              className={"flex flex-grow flex-wrap"}
+              type={"subtitle"}
+            >
               {goodsData?.goodsName}
             </ThemedText>
-            <Text className={"text-red-500 text-2xl font-bold"}>
-              ¥{goodsData?.price || "-"}
-            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              marginVertical: 5
+            }}
+          >
+            <Tag label={goodsData?.category} type={"primary"}></Tag>
           </View>
           <View className={"flex-row justify-between"}>
-            <Tag label={goodsData?.category} type={"primary"}></Tag>
+            <View className={"flex flex-row items-center justify-between"}>
+              <Image
+                style={{ width: 30, height: 30, borderRadius: 15 }}
+                resizeMode={"contain"}
+                source={{ uri: goodsData?.brandData?.logo }}
+              ></Image>
+              <Text className={"ml-2"}>{goodsData?.brandData?.brandName}</Text>
+            </View>
             <ThemedText type={"describe"} className={"text-gray-400 text-mini"}>
               剩余{goodsData?.quantity}件
             </ThemedText>
           </View>
           <View className={"mt-2 flex flex-row flex-wrap gap-5"}>
             <ThemedText type={"describe"}>
-              商品条码: {goodsData?.barcode}
-            </ThemedText>
-            <ThemedText type={"describe"}>
-              品牌: {goodsData?.brandName}
+              商品条码: {goodsData?.barcode || "-"}
             </ThemedText>
             <ThemedText type={"describe"}>
               规格: {goodsData?.model || "-"}

@@ -6,6 +6,7 @@ type TagProps = {
   label?: string;
   type: "primary" | "success" | "info" | "warning" | "danger";
   color?: string;
+  style?: StyleProp<ViewStyle>;
 };
 export default function Tag(props: TagProps) {
   const colorMap: Record<string, readonly [string, string, ...string[]]> = {
@@ -15,7 +16,7 @@ export default function Tag(props: TagProps) {
     info: [COLORS.infoColor, "#95a5a6"],
   };
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, props.style]}>
       <LinearGradient
         colors={colorMap[props.type]}
         style={{ ...styles[props.type], ...styles.dynamicBox }}

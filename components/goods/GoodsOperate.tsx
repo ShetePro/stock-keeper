@@ -62,22 +62,15 @@ export default function GoodsOperate({
         {type === 1 ? "入库" : "出货"}
       </ThemedText>
       <View>
-        {type === 1 ? (
-          <View style={styles.row}>
-            <Text style={styles.modalText}>进货价</Text>
-            <NumberInput
-              value={price as string}
-              onChange={setPrice}
-              min={0}
-              unit={"元"}
-            />
-          </View>
-        ) : (
-          <View style={styles.row}>
-            <Text style={styles.modalText}>当前零售价</Text>
-            <Text className={"text-red-500 text-xl"}>¥{goodsData?.price}</Text>
-          </View>
-        )}
+        <View style={styles.row}>
+          <Text style={styles.modalText}>价格</Text>
+          <NumberInput
+            value={price as string}
+            onChange={setPrice}
+            min={0}
+            unit={"元"}
+          />
+        </View>
         <View style={styles.row}>
           <Text style={styles.modalText}>数量</Text>
           <NumberInput

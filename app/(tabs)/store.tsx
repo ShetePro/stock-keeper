@@ -106,7 +106,7 @@ export default function StoreScreen() {
           padding: 10,
         }}
       >
-        <SearchInput className={"mb-1"} placeholder={"搜索想要的商品"} />
+        <SearchInput className={"mb-1"} placeholder={"搜索想要的商品"} onChange={() => {}} />
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
