@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     borderRadius: 20,
     padding: 10,
-    overflow: "hidden",
+    overflowX: "auto",
+    overflowY: "auto",
     boxShadow: "0 6 17 rgba(0, 0, 0, .16)",
   },
 });

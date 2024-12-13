@@ -88,21 +88,19 @@ const styles = StyleSheet.create({
   field: {
     flexDirection: "column",
     justifyContent: "center",
-    margin: 10,
-    width: "100%",
+    marginVertical: 10,
+    marginHorizontal: 10,
+    flex: 1
   },
   inline: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
+    flex: 1
   },
   control: {
     flex: 1,
   },
   input: {
-    // borderWidth: 1,
-    // borderRadius: 5,
-    // borderColor: "#ccc",
     padding: 5,
     height: 40,
   },
