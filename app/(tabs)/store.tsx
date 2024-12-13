@@ -61,7 +61,6 @@ export default function StoreScreen() {
   function getListData() {
     getGoodsListApi({})
       .then(({ data }) => {
-        console.log(data.data);
         setGoodsList(() => {
           return data.data;
         });

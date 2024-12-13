@@ -21,7 +21,6 @@ import SignView from "@/components/sign/SignView";
 import ContinueGroup from "@/components/sign/ContinueGroup";
 import Toast from "react-native-toast-message";
 import { setStorageItemAsync } from "@/hooks/useStorageState";
-import LoadingPressed from "@/components/ui/Loading";
 import { useState } from "react";
 import Loading from "@/components/ui/Loading";
 

@@ -30,6 +30,7 @@ export function BrandListPage() {
   }, [id]);
   function getStatistics() {
     getBrandMonthStatisticsApi(id).then(({ data }) => {
+      console.log(data.data)
       setMonthData(data.data);
     });
   }
