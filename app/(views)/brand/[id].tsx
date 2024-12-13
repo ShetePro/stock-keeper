@@ -7,8 +7,8 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { getBrandDetailApi, getBrandMonthStatisticsApi } from "@/api/brand";
 import { useThemeColor } from "@/hooks/useThemeColor";
@@ -23,6 +23,26 @@ export function BrandListPage() {
   const [goodsList, setGoodsList] = useState<GoodsType[]>([]);
   const [loading, setLoading] = useState(false);
   const colors = useThemeColor();
+  const [suspend, setSuspend] = useState<boolean>(false);
+  // 重新会到页面后 进行刷新
+  useFocusEffect(
+    useCallback(() => {
+      // 回到页面
+      if (suspend) {
+        getListData();
+        getStatistics();
+      }
+      const onBack = () => {
+        setSuspend(() => true);
+      };
+
+      return () => {
+        //离开页面时执行
+        onBack();
+      };
+    }, [suspend]),
+  );
+
   useEffect(() => {
     getBrandDetail();
     getListData();
@@ -30,7 +50,6 @@ export function BrandListPage() {
   }, [id]);
   function getStatistics() {
     getBrandMonthStatisticsApi(id).then(({ data }) => {
-      console.log(data.data)
       setMonthData(data.data);
     });
   }
@@ -41,6 +60,7 @@ export function BrandListPage() {
       });
   }
   function getListData() {
+    console.log("getList");
     setLoading(true);
     getGoodsListApi({ brand: id })
       .then(({ data }) => {
@@ -100,8 +120,10 @@ export function BrandListPage() {
                     : require("@/assets/images/empty-goods.png")
                 }
               ></Image>
-              <View className={"flex flex-col flex-grow justify-around basis-0"}>
-                <Text  className={"text-xl"}>{item.goodsName}</Text>
+              <View
+                className={"flex flex-col flex-grow justify-around basis-0"}
+              >
+                <Text className={"text-xl"}>{item.goodsName}</Text>
                 <View className={"flex flex-row gap-2 pt-2"}>
                   <Text className={"text-gray-500"}>
                     库存 {item.quantity}件
