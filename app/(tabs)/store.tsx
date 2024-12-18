@@ -118,7 +118,7 @@ export default function StoreScreen() {
           />
         </TouchableOpacity>
       </View>
-      {/*<CategoryTabs></CategoryTabs>*/}
+      <CategoryTabs></CategoryTabs>
       <Animated.FlatList
         onScroll={scrollHandler}
         style={[styles.container, { paddingBottom: bottomHeight }]}

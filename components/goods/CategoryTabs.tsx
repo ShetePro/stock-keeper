@@ -7,47 +7,43 @@ import {
   Pressable,
   LayoutRectangle,
 } from "react-native";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { COLORS } from "@/styles/theme";
 import Animated, {
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { PriorityQueue } from "jest-worker";
-import { onGestureHandlerEvent } from "react-native-gesture-handler/lib/typescript/handlers/gestures/eventReceiver";
+
+const categoryList = [
+  "洗衣液",
+  "牙膏",
+  "洗发露",
+  "沐浴露",
+  "洗面奶",
+  "洗洁精",
+  "化妆品",
+  "肥皂",
+].map((item, index) => {
+  return {
+    name: item,
+    id: index + "1",
+  };
+});
+categoryList.unshift({
+  id: "",
+  name: "全部",
+});
 export function CategoryTabs() {
-  const [active, setActive] = useState("");
+  const [tabActive, setTabActive] = useState("");
   const [layoutData, setLayoutData] = useState<any>({});
-  const colors = useThemeColor();
 
   const activeWidth = useSharedValue(0);
   const translateX = useSharedValue(0);
   let maxClamp = useRef(0);
-  const categoryList = [
-    "洗衣液",
-    "牙膏",
-    "洗发露",
-    "沐浴露",
-    "洗面奶",
-    "洗洁精",
-    "化妆品",
-    "肥皂",
-  ].map((item, index) => {
-    return {
-      name: item,
-      id: index + "1",
-    };
-  });
-  categoryList.unshift({
-    id: "",
-    name: "全部",
-  });
+
   function handleLayout(event: LayoutChangeEvent, item: any) {
-    console.log("handleLayout");
     const { nativeEvent } = event;
     const { layout } = nativeEvent;
     setLayoutData((prevState: any) => ({
@@ -55,16 +51,17 @@ export function CategoryTabs() {
       [item.id]: { ...layout },
     }));
     maxClamp.current = layout.x;
-    if (item.id === active) {
+    if (item.id === tabActive) {
       translateActive(layout);
     }
   }
 
   function handleChange(item: any) {
-    setActive(item.id);
+    setTabActive(item.id);
     const layout = layoutData[item.id];
     translateActive(layout);
   }
+
   function translateActive(layout: LayoutRectangle) {
     activeWidth.value = withTiming(layout.width - 32);
     translateX.value = withSpring(layout.x + 16, {
@@ -92,18 +89,26 @@ export function CategoryTabs() {
             className={"z-10"}
             onLayout={(event) => handleLayout(event, item)}
             onPress={() => handleChange(item)}
-            key={item.id}
+            key={item.name}
           >
             <View
               style={styles.category}
               className={"pl-4 pt-2 pr-4 pb-2 rounded-xl"}
             >
-              <Animated.Text
-                style={active === item.id ? styles.activeTab : styles.tab}
+              {tabActive === item.id && (
+                <Text
+                  style={styles.activeTab}
+                  className={`transition duration-300`}
+                >
+                  {item.name}
+                </Text>
+              )}
+              {tabActive !== item.id && <Text
+                style={styles.tab}
                 className={`transition duration-300`}
               >
                 {item.name}
-              </Animated.Text>
+              </Text> }
             </View>
           </Pressable>
         ))}
