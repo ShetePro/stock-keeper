@@ -11,9 +11,7 @@ import { router } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import Card from "@/components/Card";
 export default function GoodsItem(props: GoodsType) {
-  const theme = useColorScheme();
   function goDetail() {
-    console.log(props);
     router.push(`/(views)/goods/${props.id}`);
   }
   return (
@@ -22,7 +20,7 @@ export default function GoodsItem(props: GoodsType) {
         ...styles.goodsBox,
       }}
     >
-      <Pressable onPress={goDetail}>
+      <Pressable style={{flex: 1}} onPress={goDetail}>
         <Image
           resizeMode={"contain"}
           style={styles.cover}
@@ -37,7 +35,7 @@ export default function GoodsItem(props: GoodsType) {
             {props.goodsName}
           </ThemedText>
           <Tag label={props.category as string} type={"primary"}></Tag>
-          <View className={"flex flex-row items-center justify-between"}>
+          <View className={"flex flex-row items-end justify-between flex-grow"}>
             <ThemedText type={"describe"} className={"text-gray-400 text-mini"}>
               剩余{props.quantity}件
             </ThemedText>
@@ -65,5 +63,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 10,
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
 });
