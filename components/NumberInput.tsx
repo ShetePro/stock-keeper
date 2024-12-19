@@ -21,10 +21,12 @@ export default function NumberInput({
 }) {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [numberValue, setNumberValue] = useState<number | string>(value || 0);
+  const [selection, setSelection] = useState({ start: 0, end: 0 });
+  const [isFocus, setIsFocus] = useState<boolean>(false);
   let startValue = 0;
   function changeInput(num: string | number) {
     if (num) {
-      num = num ? num.toString() : "0";
+      num = num ? num.toString() : "";
       const numericValue = num.replace(/[^0-9.-]/g, "");
       if ((numericValue.match(/\./g) || []).length <= 1) {
         changeNumber(numericValue);
@@ -32,14 +34,17 @@ export default function NumberInput({
     } else {
       changeNumber(num);
     }
+    console.log(num);
+    changeNumber(num);
   }
   function changeNumber(num: string | number) {
     const value = Math.max(Math.min(max, Number(num)), min);
     onChange(value);
     setNumberValue(value);
+    const text = value.toString();
+    setSelection({ start: text.length, end: text.length });
   }
   function longPress(type: "minus" | "plus") {
-    console.log(intervalRef.current);
     if (intervalRef.current) return; // 防止重复启动定时器
     const num = Number(numberValue);
     const step = type === "plus" ? 1 : -1;
@@ -63,6 +68,16 @@ export default function NumberInput({
     intervalRef.current && clearInterval(intervalRef.current);
     intervalRef.current = null;
   }
+  function setCursorEnd() {
+    const text = numberValue.toString();
+    setSelection({ start: text.length, end: text.length });
+    setIsFocus(true);
+  }
+  function selectionChange({ nativeEvent: { selection } }: any) {
+    if (isFocus) {
+      setSelection(selection);
+    }
+  }
   return (
     <View style={styles.numberInput}>
       <Pressable
@@ -82,6 +97,11 @@ export default function NumberInput({
           className={" text-right font-bold flex-grow"}
           value={numberValue.toString()}
           onChangeText={changeInput}
+          selection={selection}
+          selectionColor={isFocus ? COLORS.black : "transparent"}
+          onBlur={() => setIsFocus(false)}
+          onSelectionChange={selectionChange}
+          onFocus={setCursorEnd}
           keyboardType={"decimal-pad"}
           inputMode="decimal"
         ></TextInput>
