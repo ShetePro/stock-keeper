@@ -123,17 +123,17 @@ export default function BrandGrid() {
       >
         <View
           className={
-            "bg-gray-50 w-full h-full p-5 flex flex-col items-center justify-between"
+            "bg-gray-50 w-full h-full p-5 flex flex-col justify-between"
           }
         >
-          <View className={"flex flex-col flex-grow"}>
+          <View style={{flex: 1}} className={'w-full'}>
             <FormItem control={control} label={"品牌名称"} prop={"brandName"} />
             <FormItem control={control} label={"英文名称"} prop={"enName"} />
             <FormItem control={control} label={"编码"} prop={"code"} />
             <FormItem control={control} label={"图标"} prop={"logo"} />
             <FormItem control={control} label={"备注"} prop={"remark"} />
           </View>
-          <View className={"flex flex-row gap-5 pb-5"}>
+          <View style={{flex: 1}} className={"flex flex-row flex-grow gap-5 pb-5 h-4"}>
             <TouchableOpacity
               onPress={closeAdd}
               className={

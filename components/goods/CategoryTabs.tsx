@@ -22,7 +22,7 @@ const categoryList = [
   "洗发露",
   "沐浴露",
   "洗面奶",
-  "洗洁精",
+  "清洁剂",
   "化妆品",
   "肥皂",
 ].map((item, index) => {
@@ -35,7 +35,11 @@ categoryList.unshift({
   id: "",
   name: "全部",
 });
-export function CategoryTabs() {
+export function CategoryTabs({
+  onChange,
+}: {
+  onChange: (value: string) => void;
+}) {
   const [tabActive, setTabActive] = useState("");
   const [layoutData, setLayoutData] = useState<any>({});
 
@@ -60,6 +64,7 @@ export function CategoryTabs() {
     setTabActive(item.id);
     const layout = layoutData[item.id];
     translateActive(layout);
+    onChange?.(item.id ? item.name : "");
   }
 
   function translateActive(layout: LayoutRectangle) {
@@ -103,12 +108,11 @@ export function CategoryTabs() {
                   {item.name}
                 </Text>
               )}
-              {tabActive !== item.id && <Text
-                style={styles.tab}
-                className={`transition duration-300`}
-              >
-                {item.name}
-              </Text> }
+              {tabActive !== item.id && (
+                <Text style={styles.tab} className={`transition duration-300`}>
+                  {item.name}
+                </Text>
+              )}
             </View>
           </Pressable>
         ))}

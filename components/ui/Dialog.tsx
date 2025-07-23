@@ -130,10 +130,10 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
   dialogView: {
     width: "80%",
+    marginHorizontal: '10%',
     overflow: "hidden",
     borderRadius: 20,
   },

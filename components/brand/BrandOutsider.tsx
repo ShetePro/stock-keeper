@@ -7,7 +7,6 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import PageView from "@/components/PageView";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import SearchInput from "@/components/ui/SearchInput";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -38,7 +37,6 @@ export default function BrandOutsider({
     getList();
   }, []);
   function getList() {
-    console.log("getList", searchText);
     getBrandPinguanApi({
       keyword: searchText,
       page: 1,
@@ -64,7 +62,7 @@ export default function BrandOutsider({
   }
 
   return (
-    <View style={{height: '100%'}}>
+    <View style={{ maxWidth: '100%', minWidth: '100%' }}>
       <View
         style={{
           flexDirection: "row",

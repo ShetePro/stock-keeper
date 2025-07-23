@@ -3,7 +3,7 @@ import UTF8 from "crypto-js/enc-utf8.js";
 import CryptoJS from "crypto-js";
 import md5 from "crypto-js/md5.js";
 import Base64 from "crypto-js/enc-base64.js";
-import forge, { kem } from "node-forge";
+import forge from "node-forge";
 export interface EncryptionParams {
   serverPublicKey: string;
 }
@@ -16,6 +16,7 @@ export class AesEncryption {
   constructor(opt: Partial<EncryptionParams> = {}) {
     const { serverPublicKey } = opt;
     const aesKey = forge.random.getBytesSync(32);
+
     if (serverPublicKey) {
       const publicKey = forge.pki.publicKeyFromPem(serverPublicKey);
       this.rsaEncrypt = publicKey.encrypt(aesKey, "RSA-OAEP", {

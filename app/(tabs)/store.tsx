@@ -18,6 +18,7 @@ import PageView from "@/components/PageView";
 import { ThemedText } from "@/components/ThemedText";
 import { useEffect, useState } from "react";
 import { getGoodsListApi } from "@/api/goods";
+import Loading from "@/components/ui/Loading";
 
 export default function StoreScreen() {
   const [goodsList, setGoodsList] = useState<GoodsType[]>([]);
@@ -25,10 +26,14 @@ export default function StoreScreen() {
   const bottomHeight = useBottomTabBarHeight();
   const headerOpacity = useSharedValue(1);
   const headerHeight = useSharedValue(40);
-  useEffect(() => {
-    console.log("get goods list");
-    getListData();
-  }, []);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<{
+    goodsName: string;
+    category: string;
+  }>({
+    goodsName: '',
+    category: ''
+  });
   const scrollHandler = useAnimatedScrollHandler((event) => {
     const offsetY = event.contentOffset.y;
     if (offsetY > 200 && headerOpacity.value === 1) {
@@ -55,18 +60,40 @@ export default function StoreScreen() {
       ],
     };
   });
+
+  function changeGoodsName (value: string) {
+    setSearch((prevState) => {
+      return {
+        ...prevState,
+        goodsName: value
+      }
+    })
+  }
   function openSort() {
     getListData();
   }
+  function changeCategory (value: string) {
+    setSearch((prevState) => {
+      return {
+        ...prevState,
+        category: value
+      }
+    })
+  }
+  useEffect(() => {
+    getListData()
+  }, [search]);
+
   function getListData() {
-    getGoodsListApi({})
+    setLoading(true);
+    getGoodsListApi(search)
       .then(({ data }) => {
         setGoodsList(() => {
           return data.data;
         });
       })
-      .catch((e) => {
-        console.log(e);
+      .finally(() => {
+        setLoading(false);
       });
   }
   return (
@@ -105,7 +132,7 @@ export default function StoreScreen() {
           padding: 10,
         }}
       >
-        <SearchInput className={"mb-1"} placeholder={"搜索想要的商品"} onChange={() => {}} />
+        <SearchInput className={"mb-1"} placeholder={"搜索想要的商品"} onChange={changeGoodsName} />
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
@@ -118,8 +145,8 @@ export default function StoreScreen() {
           />
         </TouchableOpacity>
       </View>
-      <CategoryTabs></CategoryTabs>
-      <Animated.FlatList
+      <CategoryTabs onChange={changeCategory}></CategoryTabs>
+      {loading ? <Loading></Loading> : <Animated.FlatList
         onScroll={scrollHandler}
         style={[styles.container, { paddingBottom: bottomHeight }]}
         data={goodsList}
@@ -137,7 +164,7 @@ export default function StoreScreen() {
             </ThemedText>
           </View>
         )}
-      />
+      />}
     </PageView>
   );
 }
