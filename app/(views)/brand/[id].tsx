@@ -80,8 +80,9 @@ export function BrandListPage() {
   }
   return (
     <PageView style={{ ...styles.page, backgroundColor: colors.background }}>
-      <View className={"flex flex-row items-center justify-center w-full p-4"}>
+      <View className={"flex flex-row items-center justify-start w-full p-4"}>
         <Image
+          className={'ml-8 mr-4'}
           source={{
             width: 60,
             height: 60,

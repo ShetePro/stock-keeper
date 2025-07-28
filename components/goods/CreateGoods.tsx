@@ -49,7 +49,7 @@ export default function CreateGoods({ brand }: { brand: string | string[] }) {
       .finally(() => setLoading(false));
   }
   return (
-    <PageView>
+    <view>
       <ScrollView style={{ flex: 1 }}>
         <Card style={styles.formCard}>
           <FormItem
@@ -131,7 +131,7 @@ export default function CreateGoods({ brand }: { brand: string | string[] }) {
           <Text style={{ color: COLORS.white }}>提交</Text>
         )}
       </TouchableOpacity>
-    </PageView>
+    </view>
   );
 }
 

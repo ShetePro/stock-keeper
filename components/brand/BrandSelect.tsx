@@ -2,6 +2,7 @@ import { View, Text, Pressable, Image, ScrollView } from "react-native";
 import { useEffect, useMemo, useState } from "react";
 import Dialog from "@/components/ui/Dialog";
 import { getBrandListApi } from "@/api/brand";
+import {ThemedText} from "@/components/ThemedText";
 
 export default function BrandOutsiderSelect({
   onChange,
@@ -45,7 +46,7 @@ export default function BrandOutsiderSelect({
         <Text style={{ color: "#545151" }}>{getBrandText}</Text>
       </Pressable>
       <Dialog visible={selectDialog} hide={handleClose} mask={true}>
-        <View className={"flex flex-col w-2/3 h-1/2 bg-gray-100 rounded-2xl"}>
+        <View className={"flex flex-col w-full h-full rounded-2xl"}>
           <ScrollView className={"w-full p-2"}>
             {brandList.map((item: BrandType) => (
               <Pressable
@@ -59,9 +60,9 @@ export default function BrandOutsiderSelect({
                     uri: item.logo,
                   }}
                 ></Image>
-                <Text className={"text-center text-md font-bold"}>
+                <ThemedText className={"text-center text-md font-bold"}>
                   {item.brandName}
-                </Text>
+                </ThemedText>
               </Pressable>
             ))}
           </ScrollView>

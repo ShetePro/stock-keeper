@@ -13,7 +13,11 @@ export default function PageView({
   return (
     <>
       {safeArea ? (
-        <SafeAreaView style={{ flex: 1, boxSizing: 'content', padding: 20, ...style }}>{children}</SafeAreaView>
+        <SafeAreaView
+          style={{ flex: 1, boxSizing: "content", padding: 20, ...style }}
+        >
+          {children}
+        </SafeAreaView>
       ) : (
         <View style={style}>{children}</View>
       )}

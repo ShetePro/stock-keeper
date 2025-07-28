@@ -17,6 +17,7 @@ import {
 import { FormColumnType } from "@/types/formTypes";
 import { FieldErrors } from "react-hook-form/dist/types/errors";
 import { COLORS } from "@/styles/theme";
+import {useThemeColor} from "@/hooks/useThemeColor";
 type FormItemProps = Partial<FormColumnType> & {
   control: Control<any> | undefined;
   prop: string;
@@ -44,6 +45,7 @@ export default function FormItem({
   rules,
   errors,
 }: FormItemProps) {
+  const colors = useThemeColor()
   const error = errors ? errors[prop]?.message : "";
   return (
     <View style={[styles.field, inline && styles.inline, style]} key={prop}>
@@ -69,7 +71,7 @@ export default function FormItem({
                 style={[
                   styles.input,
                   {
-                    color: "#545151",
+                    color: colors.text,
                   },
                 ]}
                 placeholder={"请输入"}
@@ -80,7 +82,7 @@ export default function FormItem({
           </View>
         )}
       />
-      {error && <Text style={styles.error}>{error as string}</Text>}
+      {error && <ThemedText style={styles.error}>{error as string}</ThemedText>}
     </View>
   );
 }

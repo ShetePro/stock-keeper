@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,

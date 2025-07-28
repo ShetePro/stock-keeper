@@ -83,7 +83,7 @@ export default function Dialog({
     if (timing) clearTimeout(timing);
     timing = setTimeout(() => {
       setDialogVisible(false);
-      hide();
+      hide?.();
     }, 500);
   }
   function handleWrapper() {
@@ -109,7 +109,7 @@ export default function Dialog({
                   style={[
                     styles.dialogView,
                     {
-                      backgroundColor: colors.background,
+                      backgroundColor: colors.cardBackground,
                       height: bodyHeight,
                       minHeight: bodyHeight,
                     },

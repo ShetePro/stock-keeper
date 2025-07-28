@@ -42,7 +42,6 @@ export default function BrandGrid() {
   function getList() {
     getBrandListApi().then(({ data }) => {
       setBrandList(data.data);
-      console.log(data.data);
     });
   }
   function goBrandDetail(item: BrandType) {
@@ -93,7 +92,7 @@ export default function BrandGrid() {
         </TouchableOpacity>
       </View>
       <ScrollView>
-        <View className={"flex flex-row flex-wrap justify-between gap-4"}>
+        <View className={"flex flex-row flex-wrap gap-4"}>
           {brandList.map((item: BrandType) => (
             <Pressable
               key={item.id}
@@ -107,14 +106,17 @@ export default function BrandGrid() {
                   uri: item.logo,
                 }}
               ></Image>
-              <Text className={"text-center text-sm font-bold"}>
+              <ThemedText
+                className={"text-center text-sm font-bold"}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
                 {item.brandName}
-              </Text>
+              </ThemedText>
             </Pressable>
           ))}
         </View>
       </ScrollView>
-
       <Dialog
         visible={addVisible}
         hide={closeAdd}
@@ -123,17 +125,17 @@ export default function BrandGrid() {
       >
         <View
           className={
-            "bg-gray-50 w-full h-full p-5 flex flex-col justify-between"
+            "w-full h-full p-5 flex flex-col justify-between"
           }
         >
-          <View style={{flex: 1}} className={'w-full'}>
+          <View style={{ flex: 1 }} className={"w-full"}>
             <FormItem control={control} label={"品牌名称"} prop={"brandName"} />
             <FormItem control={control} label={"英文名称"} prop={"enName"} />
             <FormItem control={control} label={"编码"} prop={"code"} />
             <FormItem control={control} label={"图标"} prop={"logo"} />
             <FormItem control={control} label={"备注"} prop={"remark"} />
           </View>
-          <View style={{flex: 1}} className={"flex flex-row flex-grow gap-5 pb-5 h-4"}>
+          <View className={"flex flex-row gap-5"}>
             <TouchableOpacity
               onPress={closeAdd}
               className={
